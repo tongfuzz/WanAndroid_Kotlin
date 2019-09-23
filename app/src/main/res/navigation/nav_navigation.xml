@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigationFragment"
-        android:name="com.kk.tongfu.wanandroid_kotlin.NavigationFragment"
+        android:name="com.kk.tongfu.wanandroid_kotlin.ui.navigation.NavigationFragment"
         android:label="@string/navigation"
         tools:layout="@layout/fragment_navigation" />
 </navigation>

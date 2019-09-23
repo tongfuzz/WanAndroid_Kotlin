@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homePageFragment"
-        android:name="com.kk.tongfu.wanandroid_kotlin.HomePageFragment"
+        android:name="com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageFragment"
         android:label="@string/homepage"
         tools:layout="@layout/fragment_home_page" />
 </navigation>

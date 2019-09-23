@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/systemFragment"
-        android:name="com.kk.tongfu.wanandroid_kotlin.SystemFragment"
+        android:name="com.kk.tongfu.wanandroid_kotlin.ui.system.SystemFragment"
         android:label="@string/system"
         tools:layout="@layout/fragment_system" />
 </navigation>

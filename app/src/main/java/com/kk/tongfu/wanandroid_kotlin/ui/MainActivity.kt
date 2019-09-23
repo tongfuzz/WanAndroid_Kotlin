@@ -1,6 +1,7 @@
 package com.kk.tongfu.wanandroid_kotlin.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -10,14 +11,21 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.kk.tongfu.wanandroid_kotlin.*
+import com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageViewModel
 import com.kk.tongfu.wanandroid_kotlin.util.setupWithNavController
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
 
     private var currentNavController: LiveData<NavController>? = null
+    @Inject
+    lateinit var viewModel:HomePageViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         if(savedInstanceState==null){
             initView()
         }
+
+        Log.e("mainActivity",viewModel.number.toString())
     }
 
     private fun initView() {

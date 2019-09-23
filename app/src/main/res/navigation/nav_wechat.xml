@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/weChatFragment"
-        android:name="com.kk.tongfu.wanandroid_kotlin.WeChatFragment"
+        android:name="com.kk.tongfu.wanandroid_kotlin.ui.wechat.WeChatFragment"
         android:label="@string/we_chat"
         tools:layout="@layout/fragment_we_chat" />
 </navigation>
