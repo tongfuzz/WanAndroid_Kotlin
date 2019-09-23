@@ -1,6 +1,9 @@
 package com.kk.tongfu.wanandroid_kotlin.ui.homepage
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.kk.tongfu.wanandroid_kotlin.service.model.Banner
+import com.kk.tongfu.wanandroid_kotlin.service.repository.PorjectRepository
 import javax.inject.Inject
 
 /**
@@ -9,7 +12,11 @@ import javax.inject.Inject
  * Desc:
  */
 
-class HomePageViewModel @Inject constructor():ViewModel() {
+class HomePageViewModel @Inject constructor(repository: PorjectRepository) :
+    ViewModel() {
 
-    var number=10
+    private var bannerListObservable: LiveData<List<Banner>> = repository.getBannerList()
+
+    fun getBannerListObservable(): LiveData<List<Banner>> = bannerListObservable
+
 }

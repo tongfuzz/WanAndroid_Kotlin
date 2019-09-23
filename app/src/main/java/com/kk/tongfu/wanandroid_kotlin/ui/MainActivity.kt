@@ -24,8 +24,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
 
     private var currentNavController: LiveData<NavController>? = null
-    @Inject
-    lateinit var viewModel:HomePageViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +32,6 @@ class MainActivity : DaggerAppCompatActivity() {
         if(savedInstanceState==null){
             initView()
         }
-
-        Log.e("mainActivity",viewModel.number.toString())
     }
 
     private fun initView() {

@@ -5,13 +5,16 @@
     >
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
