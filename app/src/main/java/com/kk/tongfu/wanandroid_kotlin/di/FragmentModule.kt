@@ -1,6 +1,8 @@
 package com.kk.tongfu.wanandroid_kotlin.di
 
 import com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageFragment
+import com.kk.tongfu.wanandroid_kotlin.ui.navigation.NavigationFragment
+import com.kk.tongfu.wanandroid_kotlin.ui.navigation.NavigationViewModel
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -15,4 +17,7 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector
     internal abstract fun homeFragment():HomePageFragment
+
+    @ContributesAndroidInjector
+    internal abstract fun navigationFragment():NavigationFragment
 }

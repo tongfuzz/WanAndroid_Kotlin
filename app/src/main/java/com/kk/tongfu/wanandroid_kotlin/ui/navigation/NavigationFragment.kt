@@ -8,11 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kk.tongfu.wanandroid_kotlin.R
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
-class NavigationFragment : Fragment() {
+class NavigationFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var viewModel: NavigationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,6 +33,9 @@ class NavigationFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("NavigationFragment","onCreate")
+        viewModel.apply {
+
+        }
     }
 
 }

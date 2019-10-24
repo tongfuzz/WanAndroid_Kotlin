@@ -1,5 +1,6 @@
 package com.kk.tongfu.wanandroid_kotlin.di
 
+import androidx.lifecycle.ViewModel
 import com.kk.tongfu.wanandroid_kotlin.MainApplication
 import dagger.BindsInstance
 import dagger.Component
@@ -25,6 +26,4 @@ interface AppComponent {
     }
 
     fun inject(app:MainApplication)
-
-
 }

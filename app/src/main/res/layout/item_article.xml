@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <data>
+        <import type="com.kk.tongfu.wanandroid_kotlin.service.model.Article"></import>
+
+        <variable
+            name="articleItem"
+            type="Article" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{articleItem.title}"
+            ></TextView>
+
+    </LinearLayout>
+</layout>

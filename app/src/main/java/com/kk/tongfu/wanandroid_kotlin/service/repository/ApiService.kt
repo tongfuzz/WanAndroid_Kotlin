@@ -1,9 +1,13 @@
 package com.kk.tongfu.wanandroid_kotlin.service.repository
 
-import android.telecom.Call
+import com.kk.tongfu.wanandroid_kotlin.service.model.Article
+import com.kk.tongfu.wanandroid_kotlin.service.model.ArticleList
 import com.kk.tongfu.wanandroid_kotlin.service.model.Banner
-import com.kk.tongfu.wanandroid_kotlin.service.model.Response
+import com.kk.tongfu.wanandroid_kotlin.service.model.BaseResponse
+import kotlinx.coroutines.Deferred
+import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 /**
  * Created by tongfu
@@ -14,6 +18,12 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("banner/json")
-    fun getBannerData(): retrofit2.Call<Response<List<Banner>>>
+    suspend fun getBannerData(): BaseResponse<MutableList<Banner>?>
+
+    @GET("article/top/json")
+    suspend fun getTopArticleListData(): BaseResponse<MutableList<Article>?>
+
+    @GET("article/list/{pageNum}/json")
+    suspend fun getArticleListData(@Path("pageNum") pageNum: Int): BaseResponse<ArticleList?>
 
 }
