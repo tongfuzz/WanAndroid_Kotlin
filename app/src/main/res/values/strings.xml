@@ -33,4 +33,6 @@
     <string name="chapter_name_format">%1$s / %2$s</string>
     <string name="exit_tips">再按一次退出程序</string>
     <string name="to_detail_activity">跳转到详情页</string>
+    <string name="no_more_data">暂无更多数据</string>
+    <string name="failed_to_refresh">刷新失败</string>
 </resources>

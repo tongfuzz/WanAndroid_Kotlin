@@ -1,6 +1,9 @@
 package com.kk.tongfu.wanandroid_kotlin.util
 
+import android.app.Activity
 import android.util.Log
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
@@ -29,5 +32,21 @@ fun <T>BaseResponse<T>.dataConvert():T?{
     }else{
         return null
     }
+}
+
+fun Fragment.toast(info:String){
+    Toast.makeText(context,info,Toast.LENGTH_SHORT).show()
+}
+
+fun Fragment.toast(@StringRes info:Int){
+    Toast.makeText(context,info,Toast.LENGTH_SHORT).show()
+}
+
+fun Activity.toast(info:String){
+    Toast.makeText(this,info,Toast.LENGTH_SHORT).show()
+}
+
+fun Activity.toast(@StringRes info:Int){
+    Toast.makeText(this,info,Toast.LENGTH_SHORT).show()
 }
 

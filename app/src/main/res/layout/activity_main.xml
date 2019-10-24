@@ -44,6 +44,7 @@
                 app:elevation="16dp"
                 android:background="@color/page_background"
                 app:labelVisibilityMode="labeled"
+                app:layout_behavior="com.kk.tongfu.wanandroid_kotlin.behavior.BottomNavigationBehavior"
                 app:menu="@menu/navigation_bottom_menu"></com.google.android.material.bottomnavigation.BottomNavigationView>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

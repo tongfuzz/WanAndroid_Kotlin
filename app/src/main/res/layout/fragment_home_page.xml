@@ -21,37 +21,36 @@
             type="OnRefreshLoadMoreListener" />
     </data>
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:onRefreshLoadMoreListener="@{refreshLis}"
-        app:refreshState="@{viewModel.refreshState}"
-        app:enableLoadMore="@{viewModel.hasMore.booleanValue()}"
-        >
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/tv_loading"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            app:textInfoAndVisiable="@{viewModel.loadState}"></TextView>
 
-            <TextView
-                android:id="@+id/tv_loading"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/loading"
-                android:visibility="@{viewModel.loadState.equals(LoadState.LOADING)?View.VISIBLE:View.GONE}"></TextView>
-
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewModel.loadState.equals(LoadState.SUCCESS)?View.VISIBLE:View.GONE}"
+            app:enableLoadMore="@{viewModel.hasMore.booleanValue()}"
+            app:onRefreshLoadMoreListener="@{refreshLis}"
+            app:refreshState="@{viewModel.refreshState}">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="@{viewModel.loadState.equals(LoadState.LOADING)?View.GONE:View.VISIBLE}"
-                app:layoutManager="LinearLayoutManager"
-                ></androidx.recyclerview.widget.RecyclerView>
-        </RelativeLayout>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+                app:layoutManager="LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </RelativeLayout>
+
 
 </layout>
