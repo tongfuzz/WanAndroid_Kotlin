@@ -27,10 +27,11 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tv_loading"
+            android:id="@+id/tvLoading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:onClick="@{()->viewModel.clickTvLoading()}"
             app:textInfoAndVisiable="@{viewModel.loadState}"></TextView>
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout

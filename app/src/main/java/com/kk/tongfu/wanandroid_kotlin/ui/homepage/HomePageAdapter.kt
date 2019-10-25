@@ -27,15 +27,6 @@ class HomePageAdapter :
         holder.bind(getItem(position))
     }
 
-    override fun onBindViewHolder(
-        holder: HomePageViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
-    ) {
-        super.onBindViewHolder(holder, position, payloads)
-    }
-
-
 }
 
 class HomePageViewHolder(private val binding: ItemArticleBinding) :
@@ -53,11 +44,6 @@ object ArticleDiff : DiffUtil.ItemCallback<Article>() {
 
     override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
         return oldItem == newItem
-    }
-
-    override fun getChangePayload(oldItem: Article, newItem: Article): Any? {
-
-        return super.getChangePayload(oldItem, newItem)
     }
 
 }

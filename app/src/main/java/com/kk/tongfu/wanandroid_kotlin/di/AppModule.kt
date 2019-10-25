@@ -1,8 +1,10 @@
 package com.kk.tongfu.wanandroid_kotlin.di
 
+import com.kk.tongfu.wanandroid_kotlin.MainApplication
 import com.kk.tongfu.wanandroid_kotlin.service.repository.ApiService
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -17,11 +19,20 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideApiService(): ApiService {
+    fun provideApiService(okHttpClient: OkHttpClient): ApiService {
         return Retrofit.Builder()
             .baseUrl(Constant.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
             .build()
             .create(ApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().addNetworkInterceptor { chain ->
+            chain.proceed(chain.request())
+        }.build()
     }
 }

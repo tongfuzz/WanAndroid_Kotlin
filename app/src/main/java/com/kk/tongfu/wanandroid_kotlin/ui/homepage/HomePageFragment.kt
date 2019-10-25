@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
 import com.kk.tongfu.wanandroid_kotlin.R
 import com.kk.tongfu.wanandroid_kotlin.databinding.FragmentHomePageBinding
 import com.kk.tongfu.wanandroid_kotlin.service.LoadState
@@ -17,28 +16,18 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_home_page.*
 import javax.inject.Inject
 
 class HomePageFragment : DaggerFragment() {
 
-    val TAG: String = "HomePageFragment"
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-
-
     private lateinit var model: HomePageViewModel
     private lateinit var binding: FragmentHomePageBinding
-    private lateinit var refreshListener: OnRefreshLoadMoreListener
-    private var adapter = HomePageAdapter()
+    private val refreshListener  by lazy {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        model = viewModelProvider(viewModelFactory)
-        refreshListener = object : OnRefreshLoadMoreListener {
+        val listener = object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
                 model.loadMoreData()
             }
@@ -46,44 +35,60 @@ class HomePageFragment : DaggerFragment() {
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 model.refreshData()
             }
+
+        }
+        listener
+
+    }
+    private var adapter = HomePageAdapter()
+
+    private var homepageView: View? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        if (homepageView == null) {
+            binding = FragmentHomePageBinding.inflate(inflater, container, false)
+            homepageView = binding.root
         }
 
-        binding = FragmentHomePageBinding.inflate(inflater, container, false).apply {
-            lifecycleOwner = viewLifecycleOwner
-            viewModel = model
-            refreshLis = refreshListener
-            recyclerView.adapter = adapter
-            swipeRefreshLayout.setRefreshHeader(ClassicsHeader(context))
-            tvLoading.setOnClickListener {
-                if(model.loadState!=LoadState.LOADING){
-                    model.loadState.value=LoadState.LOADING
-                }
-            }
-        }
-
-        return binding.root
+        return homepageView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        model = viewModelProvider(viewModelFactory)
+
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = model
+            refreshLis = refreshListener
+            recyclerView.adapter = adapter
+        }
+
+        swipeRefreshLayout.setRefreshHeader(ClassicsHeader(context))
+
         model.articleList?.observe(this, Observer {
             it ?: return@Observer
             adapter.submitList(it.toMutableList())
         })
+
         model.refreshState.observe(this, Observer {
-            when(it){
-                RefreshState.LOADING_ERROR->toast(R.string.no_more_data)
-                RefreshState.REFRESHING_ERROR->toast(R.string.failed_to_refresh)
+            when (it) {
+                RefreshState.LOADING_ERROR -> toast(R.string.no_more_data)
+                RefreshState.REFRESHING_ERROR -> toast(R.string.failed_to_refresh)
             }
         })
 
         model.loadState.observe(this, Observer {
-            when(it){
-                LoadState.LOADING->{model.loadData()}
+            when (it) {
+                LoadState.LOADING -> {
+                    model.loadData()
+                }
             }
         })
-
-        model.loadData()
 
     }
 

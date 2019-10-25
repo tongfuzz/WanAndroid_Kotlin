@@ -29,4 +29,10 @@ import javax.inject.Inject
     override fun androidInjector(): AndroidInjector<Any> {
         return dispatchingAndroidInjector
     }
+
+    companion object{
+
+        @JvmField
+        val appContext=this
+    }
 }

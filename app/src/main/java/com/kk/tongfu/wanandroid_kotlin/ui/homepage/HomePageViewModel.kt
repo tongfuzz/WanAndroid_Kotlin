@@ -11,6 +11,8 @@ import com.kk.tongfu.wanandroid_kotlin.service.model.Article
 import com.kk.tongfu.wanandroid_kotlin.service.model.Banner
 import com.kk.tongfu.wanandroid_kotlin.service.model.HomepageData
 import com.kk.tongfu.wanandroid_kotlin.service.repository.ApiService
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,7 +39,7 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
     val homePageData: LiveData<HomepageData>
         get() = _homepageData
 
-    private val _loadState: MutableLiveData<LoadState> = MutableLiveData(LoadState.LOADING)
+    private val _loadState: MutableLiveData<LoadState> = MutableLiveData(LoadState.SUCCESS)
     val loadState: MutableLiveData<LoadState>
         get() = _loadState
 
@@ -48,6 +50,10 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
 
     val hasMore: MutableLiveData<Boolean> = MutableLiveData(true)
     var pageNum: Int = 0
+
+    init {
+        _loadState.value=LoadState.LOADING
+    }
 
     //刷新时获取数据
     fun loadData() {
@@ -139,7 +145,12 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
     fun refreshData() {
         _refreshState.value = RefreshState.REFRESHING
         loadData()
+    }
 
+    fun clickTvLoading(){
+        if (_loadState != LoadState.LOADING) {
+            _loadState.value = LoadState.LOADING
+        }
     }
 
 }
