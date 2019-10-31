@@ -1,24 +1,18 @@
 package com.kk.tongfu.wanandroid_kotlin.ui
 
 import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.kk.tongfu.wanandroid_kotlin.*
-import com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageViewModel
+import com.kk.tongfu.wanandroid_kotlin.R
+import com.kk.tongfu.wanandroid_kotlin.interfaces.ScrollTop
 import com.kk.tongfu.wanandroid_kotlin.util.setupWithNavController
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
-import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity() {
 
@@ -29,7 +23,7 @@ class MainActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if(savedInstanceState==null){
+        if (savedInstanceState == null) {
             initView()
         }
     }
@@ -38,6 +32,15 @@ class MainActivity : DaggerAppCompatActivity() {
         nav_view.inflateHeaderView(R.layout.view_nav_header)
         initToolbar()
         initBottomNav()
+        floating_button.setOnClickListener {
+            val primaryNavigationFragment = supportFragmentManager.primaryNavigationFragment
+            val fragments = primaryNavigationFragment?.childFragmentManager?.fragments
+            val fragment = fragments?.get(0)
+            if(fragment is ScrollTop){
+                fragment.scrollTop()
+            }
+
+        }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -48,13 +51,25 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private fun initBottomNav() {
 
-        val navGraphIds=listOf(R.navigation.nav_homepage,R.navigation.nav_system,R.navigation.nav_wechat,R.navigation.nav_navigation,R.navigation.nav_project)
-        val controller = bottomNav.setupWithNavController(navGraphIds,supportFragmentManager,R.id.fragment_content,intent)
+        val navGraphIds = listOf(
+            R.navigation.nav_homepage,
+            R.navigation.nav_system,
+            R.navigation.nav_wechat,
+            R.navigation.nav_navigation,
+            R.navigation.nav_project
+        )
+        val controller: LiveData<NavController>
+        controller = bottomNav.setupWithNavController(
+            navGraphIds,
+            supportFragmentManager,
+            R.id.fragment_content,
+            intent
+        )
         controller.observe(this, Observer {
             val appBarConfiguration = AppBarConfiguration(it.graph, drawerLayout)
-            toolBar.setupWithNavController(it,appBarConfiguration)
+            toolBar.setupWithNavController(it, appBarConfiguration)
         })
-        currentNavController=controller
+        currentNavController = controller
 
     }
 

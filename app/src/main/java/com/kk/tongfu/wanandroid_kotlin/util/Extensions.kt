@@ -20,10 +20,8 @@ import com.kk.tongfu.wanandroid_kotlin.service.model.Tag
  */
 
 //通过reified关键字，将VM标记为运行是可获取类型，即我们声明的viewmodel变量是什么类型，VM表示的就是什么类型
-inline fun <reified VM : ViewModel> Fragment.viewModelProvider(
-    provider: ViewModelProvider.Factory
-) =
-    ViewModelProviders.of(this, provider).get(VM::class.java)
+inline fun <reified VM : ViewModel> Fragment.viewModelProvider(viewModelFactory: ViewModelProvider.Factory) =
+    ViewModelProviders.of(this,viewModelFactory).get(VM::class.java)
 
 
 fun <T>BaseResponse<T>.dataConvert():T?{

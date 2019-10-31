@@ -2,6 +2,7 @@ package com.kk.tongfu.wanandroid_kotlin.di
 
 import com.kk.tongfu.wanandroid_kotlin.MainApplication
 import com.kk.tongfu.wanandroid_kotlin.service.repository.ApiService
+import com.kk.tongfu.wanandroid_kotlin.service.repository.ProjectRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -34,5 +35,11 @@ class AppModule {
         return OkHttpClient.Builder().addNetworkInterceptor { chain ->
             chain.proceed(chain.request())
         }.build()
+    }
+
+    @Provides
+    @Singleton
+    fun privideProjectRepository(apiService: ApiService):ProjectRepository{
+        return ProjectRepository(apiService)
     }
 }

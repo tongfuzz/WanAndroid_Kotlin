@@ -3,6 +3,7 @@
     package="com.kk.tongfu.wanandroid_kotlin">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
 
     <application
         android:name=".MainApplication"
@@ -26,6 +27,8 @@
             android:theme="@style/AppTheme"
             >
         </activity>
+
+        <activity android:name=".ui.homepage.DetailsActivity"></activity>
     </application>
 
 </manifest>

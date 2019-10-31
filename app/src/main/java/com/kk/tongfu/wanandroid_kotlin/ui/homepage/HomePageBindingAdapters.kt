@@ -1,13 +1,18 @@
 package com.kk.tongfu.wanandroid_kotlin.ui.homepage
 
+import android.content.Intent
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.kk.tongfu.wanandroid_kotlin.R
 import com.kk.tongfu.wanandroid_kotlin.service.LoadState
 import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
+import com.kk.tongfu.wanandroid_kotlin.service.model.BannerList
+import com.kk.tongfu.wanandroid_kotlin.util.GlideImageLoader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
+import com.youth.banner.Banner
+import com.youth.banner.BannerConfig
 
 /**
  * Created by tongfu
@@ -63,6 +68,28 @@ fun setTextViewText(view: TextView, loadState: LoadState) {
             view.visibility = View.GONE
         }
     }
+}
+
+@BindingAdapter("app:bannerItems")
+fun setBannerList(banner:Banner,bannerList: BannerList){
+    val images = bannerList.data?.map {
+        it.imagePath
+    }
+
+    val titles = bannerList.data?.map {
+        it.title
+    }
+
+    banner.setImageLoader(GlideImageLoader())
+    banner.setImages(images)
+    banner.setBannerTitles(titles)
+    banner.setOnBannerListener {
+        bannerList.data?.get(it)?.title.apply {
+            banner.context.startActivity(Intent(banner.context,DetailsActivity::class.java))
+        }
+    }
+    banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
+    banner.start()
 }
 
 /*

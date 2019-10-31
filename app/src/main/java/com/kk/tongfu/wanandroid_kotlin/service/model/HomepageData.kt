@@ -10,5 +10,5 @@ import androidx.lifecycle.MutableLiveData
 
 data class HomepageData(
     var bannerList: MutableLiveData<MutableList<Banner>?>,
-    var articleList: MutableLiveData<MutableList<Article>?>
+    var articleList: MutableLiveData<MutableList<out Any>?>
 )

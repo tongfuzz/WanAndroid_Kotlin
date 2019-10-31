@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kk.tongfu.wanandroid_kotlin.R
 import com.kk.tongfu.wanandroid_kotlin.databinding.FragmentHomePageBinding
+import com.kk.tongfu.wanandroid_kotlin.interfaces.ScrollTop
 import com.kk.tongfu.wanandroid_kotlin.service.LoadState
 import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
 import com.kk.tongfu.wanandroid_kotlin.util.toast
@@ -19,13 +20,14 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_home_page.*
 import javax.inject.Inject
 
-class HomePageFragment : DaggerFragment() {
+class HomePageFragment : DaggerFragment(), ScrollTop {
+
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var model: HomePageViewModel
     private lateinit var binding: FragmentHomePageBinding
-    private val refreshListener  by lazy {
+    private val refreshListener by lazy {
 
         val listener = object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
@@ -89,7 +91,10 @@ class HomePageFragment : DaggerFragment() {
                 }
             }
         })
+    }
 
+    override fun scrollTop() {
+        recyclerView.smoothScrollToPosition(0)
     }
 
 

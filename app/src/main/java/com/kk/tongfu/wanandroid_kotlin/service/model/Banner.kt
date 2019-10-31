@@ -6,5 +6,13 @@ package com.kk.tongfu.wanandroid_kotlin.service.model
  * Desc:
  */
 
-class Banner constructor(val desc:String,val id:Int,val imagePath:String,val isVisible:Int,val order:Int,val title:String,val type:Int,val url:String) {
-}
+data class Banner constructor(
+    val desc: String,
+    val id: Int,
+    val imagePath: String,
+    val isVisible: Int,
+    val order: Int,
+    val title: String,
+    val type: Int,
+    val url: String
+)

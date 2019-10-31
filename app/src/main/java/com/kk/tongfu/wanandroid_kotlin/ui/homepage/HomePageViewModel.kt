@@ -7,12 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.kk.tongfu.wanandroid_kotlin.service.HttpCode
 import com.kk.tongfu.wanandroid_kotlin.service.LoadState
 import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
-import com.kk.tongfu.wanandroid_kotlin.service.model.Article
-import com.kk.tongfu.wanandroid_kotlin.service.model.Banner
-import com.kk.tongfu.wanandroid_kotlin.service.model.HomepageData
+import com.kk.tongfu.wanandroid_kotlin.service.model.BannerList
 import com.kk.tongfu.wanandroid_kotlin.service.repository.ApiService
-import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,22 +18,21 @@ import javax.inject.Inject
  * Desc:
  */
 
-class HomePageViewModel @Inject constructor(private val apiService: ApiService) :
+class HomePageViewModel @Inject constructor(val apiService: ApiService) :
     ViewModel() {
 
 
-    private val _bannerList: MutableLiveData<MutableList<Banner>?> = MutableLiveData()
-    val bannerList: LiveData<MutableList<Banner>?>
+    private val _bannerList: MutableLiveData<BannerList?> = MutableLiveData(BannerList(null))
+    val bannerList: LiveData<BannerList?>
         get() = _bannerList
 
-    private val _articleList: MutableLiveData<MutableList<Article>?> = MutableLiveData()
-    val articleList: LiveData<MutableList<Article>?>
-        get() = _articleList
+    private val _articleList: MutableLiveData<MutableList<Any>?> = MutableLiveData()
+    val articleList: MutableLiveData<MutableList<Any>?> = _articleList
 
-    private val _homepageData: MutableLiveData<HomepageData> =
-        MutableLiveData(HomepageData(bannerList = _bannerList, articleList = _articleList))
-    val homePageData: LiveData<HomepageData>
-        get() = _homepageData
+    /* private val _homepageData: MutableLiveData<HomepageData> =
+         MutableLiveData(HomepageData(bannerList = _bannerList, articleList = _articleList))
+     val homePageData: LiveData<HomepageData>
+         get() = _homepageData*/
 
     private val _loadState: MutableLiveData<LoadState> = MutableLiveData(LoadState.SUCCESS)
     val loadState: MutableLiveData<LoadState>
@@ -52,7 +47,7 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
     var pageNum: Int = 0
 
     init {
-        _loadState.value=LoadState.LOADING
+        _loadState.value = LoadState.LOADING
     }
 
     //刷新时获取数据
@@ -88,11 +83,18 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
                     if (articleList.data != null) {
                         articleList.data.datas.addAll(0, data)
                     }
-
                 }
+
+
                 //设置数据
-                _bannerList.value = bannerList.data
-                _articleList.value = articleList.data?.datas
+                _bannerList.value?.data = bannerList.data
+                if (bannerList.errorCode == HttpCode.SUCCESS && bannerList.data != null && bannerList.data.isNotEmpty()) {
+                    (articleList.data?.datas as MutableList<Any>).add(0, _bannerList.value as Any)
+                }
+
+                val mutableList = articleList.data?.datas as MutableList<Any>
+
+                _articleList.value = mutableList
                 //更新加载状态
                 if (_loadState.value == LoadState.LOADING) {
                     //如果是初次加载，设置初次加载成功
@@ -101,9 +103,6 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
                     //如果是刷新加载，设置刷新加载成功
                     _refreshState.value = RefreshState.REFRESHING_SUCCESS
                 }
-
-                println("homepageviewmodel   pagenum:$pageNum")
-
             } catch (e: Exception) {
                 println(e.message)
                 _loadState.value = LoadState.NO_NETWORK
@@ -147,7 +146,7 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
         loadData()
     }
 
-    fun clickTvLoading(){
+    fun clickTvLoading() {
         if (_loadState != LoadState.LOADING) {
             _loadState.value = LoadState.LOADING
         }

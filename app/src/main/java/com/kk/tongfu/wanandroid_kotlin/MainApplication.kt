@@ -24,6 +24,8 @@ import javax.inject.Inject
     override fun onCreate() {
         super.onCreate()
         DaggerAppComponent.builder().application(this).build().inject(this)
+        application=this
+
     }
 
     override fun androidInjector(): AndroidInjector<Any> {
@@ -34,5 +36,8 @@ import javax.inject.Inject
 
         @JvmField
         val appContext=this
+
+        @JvmField
+        var application:Application?=null
     }
 }

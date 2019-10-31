@@ -1,25 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <import type="com.kk.tongfu.wanandroid_kotlin.service.model.Article"></import>
 
+        <import type="android.view.View"></import>
+
+        <import type="android.text.TextUtils"></import>
+
         <variable
-            name="articleItem"
-            type="Article" />
+            name="viewModel"
+            type="com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageAdapterViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="6dp"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{articleItem.title}"
-            ></TextView>
+            android:padding="12dp">
 
-    </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_top"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/shape_label_red"
+                    android:text="@string/top"
+                    android:textColor="@color/primary_red"
+                    android:textSize="12sp"
+                    android:visibility="@{viewModel.top?View.VISIBLE:View.GONE}"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_fresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/shape_label_red"
+                    android:text="@string/fresh"
+                    android:textColor="@color/primary_red"
+                    android:textSize="12sp"
+                    android:visibility="@{viewModel.fresh?View.VISIBLE:View.GONE}"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/shape_label_green"
+                    android:text="@{viewModel.tag}"
+                    android:textColor="@color/primary_green"
+                    android:textSize="12sp"
+                    android:visibility="@{!TextUtils.isEmpty(viewModel.tag)? View.VISIBLE:View.GONE}"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@{viewModel.author}"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="12sp"
+                    tools:text="作者"></TextView>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@{viewModel.time}"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="12sp"
+                    tools:text="时间"></TextView>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{viewModel.title}"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_label"
+                tools:text="文章标题" />
+
+            <TextView
+                android:id="@+id/tv_chapterName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@{viewModel.chapterName}"
+                android:textColor="@color/secondary_text"
+                android:textSize="12sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_title"
+                tools:text="章节名" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 </layout>
