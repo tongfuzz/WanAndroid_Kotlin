@@ -1,13 +1,9 @@
 package com.kk.tongfu.wanandroid_kotlin.di
 
 import com.kk.tongfu.wanandroid_kotlin.ui.MainActivity
-import com.kk.tongfu.wanandroid_kotlin.ui.homepage.DetailsActivity
-import dagger.Binds
+import com.kk.tongfu.wanandroid_kotlin.ui.homepage.ArticleDetailActivity
 import dagger.Module
-import dagger.android.AndroidInjector
 import dagger.android.ContributesAndroidInjector
-import dagger.multibindings.ClassKey
-import dagger.multibindings.IntoMap
 
 /**
  * Created by tongfu
@@ -21,6 +17,6 @@ abstract class ActivityModule {
     internal abstract fun mainActivity():MainActivity
 
     @ContributesAndroidInjector
-    internal abstract fun detailsActivity():DetailsActivity
+    internal abstract fun detailsActivity():ArticleDetailActivity
 
 }

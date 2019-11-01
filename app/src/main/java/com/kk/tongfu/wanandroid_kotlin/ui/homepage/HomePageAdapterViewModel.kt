@@ -16,7 +16,7 @@ class HomePageAdapterViewModel constructor(item: Article) : ViewModel() {
 
     val top = MutableLiveData<Boolean>(item.top)
     val fresh = MutableLiveData<Boolean>(item.fresh)
-    val tag= MutableLiveData<String>(item.tags?.firstOrNull()?.name)
+    val tag= MutableLiveData<String>(item.tags.firstOrNull()?.name)
     val author = MutableLiveData<String>(item.author)
     val time = MutableLiveData<String>(item.niceDate)
     val title = MutableLiveData<String>(item.title)
@@ -27,4 +27,6 @@ class HomePageAdapterViewModel constructor(item: Article) : ViewModel() {
             item.chapterName
         )
     )
+    val url =item.link
+
 }

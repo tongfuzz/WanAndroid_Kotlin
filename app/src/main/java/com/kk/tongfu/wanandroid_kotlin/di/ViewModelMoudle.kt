@@ -2,13 +2,11 @@ package com.kk.tongfu.wanandroid_kotlin.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.kk.tongfu.wanandroid_kotlin.ui.homepage.DetailsActivity
 import com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageViewModel
 import com.kk.tongfu.wanandroid_kotlin.ui.navigation.NavigationViewModel
 import com.kk.tongfu.wanandroid_kotlin.viewmodel.ProjectViewModelFactory
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.multibindings.IntoMap
 import dagger.multibindings.StringKey
 import javax.inject.Singleton

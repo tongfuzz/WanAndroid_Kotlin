@@ -31,6 +31,7 @@ fun setRefreshState(view: SmartRefreshLayout, state: RefreshState) {
             view.finishRefresh()
         }
 
+        else -> {}
     }
 }
 
@@ -85,7 +86,7 @@ fun setBannerList(banner:Banner,bannerList: BannerList){
     banner.setBannerTitles(titles)
     banner.setOnBannerListener {
         bannerList.data?.get(it)?.title.apply {
-            banner.context.startActivity(Intent(banner.context,DetailsActivity::class.java))
+            banner.context.startActivity(Intent(banner.context,ArticleDetailActivity::class.java))
         }
     }
     banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)

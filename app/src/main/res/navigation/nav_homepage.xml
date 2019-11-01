@@ -9,5 +9,20 @@
         android:id="@+id/homePageFragment"
         android:name="com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageFragment"
         android:label="@string/homepage"
-        tools:layout="@layout/fragment_home_page" />
+        tools:layout="@layout/fragment_home_page">
+        <action
+            android:id="@+id/action_homePageFragment_to_detailsActivity"
+            app:destination="@id/articleDetailsActivity">
+
+        </action>
+    </fragment>
+    <activity
+        android:id="@+id/articleDetailsActivity"
+        android:name="com.kk.tongfu.wanandroid_kotlin.ui.homepage.ArticleDetailActivity"
+        android:label="ArticleDetailsActivity">
+        <argument
+            android:name="url"
+            app:nullable="false"
+            app:argType="string" />
+    </activity>
 </navigation>

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.kk.tongfu.wanandroid_kotlin.R
 import com.kk.tongfu.wanandroid_kotlin.databinding.FragmentHomePageBinding
 import com.kk.tongfu.wanandroid_kotlin.interfaces.ScrollTop
@@ -40,9 +41,17 @@ class HomePageFragment : DaggerFragment(), ScrollTop {
 
         }
         listener
-
     }
-    private var adapter = HomePageAdapter()
+
+    private val onClickListener = object : HomePageItemClickListener {
+        override fun onArticleItemClick(view:View,viewModel: HomePageAdapterViewModel) {
+            val actionHomePageFragmentToDetailsActivity =
+                HomePageFragmentDirections.actionHomePageFragmentToDetailsActivity(viewModel.url)
+            findNavController().navigate(actionHomePageFragmentToDetailsActivity)
+        }
+    }
+
+    private var adapter = HomePageAdapter(onClickListener)
 
     private var homepageView: View? = null
 
@@ -72,7 +81,7 @@ class HomePageFragment : DaggerFragment(), ScrollTop {
 
         swipeRefreshLayout.setRefreshHeader(ClassicsHeader(context))
 
-        model.articleList?.observe(this, Observer {
+        model.articleList.observe(this, Observer {
             it ?: return@Observer
             adapter.submitList(it.toMutableList())
         })
@@ -81,14 +90,13 @@ class HomePageFragment : DaggerFragment(), ScrollTop {
             when (it) {
                 RefreshState.LOADING_ERROR -> toast(R.string.no_more_data)
                 RefreshState.REFRESHING_ERROR -> toast(R.string.failed_to_refresh)
+                else -> {}
             }
         })
 
         model.loadState.observe(this, Observer {
-            when (it) {
-                LoadState.LOADING -> {
-                    model.loadData()
-                }
+            if(it==LoadState.LOADING){
+                model.loadData()
             }
         })
     }

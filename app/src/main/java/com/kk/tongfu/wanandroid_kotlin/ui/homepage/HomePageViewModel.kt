@@ -18,7 +18,7 @@ import javax.inject.Inject
  * Desc:
  */
 
-class HomePageViewModel @Inject constructor(val apiService: ApiService) :
+class HomePageViewModel @Inject constructor(private val apiService: ApiService) :
     ViewModel() {
 
 
@@ -147,7 +147,7 @@ class HomePageViewModel @Inject constructor(val apiService: ApiService) :
     }
 
     fun clickTvLoading() {
-        if (_loadState != LoadState.LOADING) {
+        if (_loadState.value != LoadState.LOADING) {
             _loadState.value = LoadState.LOADING
         }
     }
