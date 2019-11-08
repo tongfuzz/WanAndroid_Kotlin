@@ -1,12 +1,14 @@
 package com.kk.tongfu.wanandroid_kotlin.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.kk.tongfu.wanandroid_kotlin.R
 import com.kk.tongfu.wanandroid_kotlin.service.HttpCode
 import com.kk.tongfu.wanandroid_kotlin.service.LoadState
 import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
 import com.kk.tongfu.wanandroid_kotlin.service.model.Chapter
-import com.kk.tongfu.wanandroid_kotlin.service.repository.ApiService
+import com.kk.tongfu.wanandroid_kotlin.service.repository.ProjectRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,19 +18,34 @@ import javax.inject.Inject
  * Desc:
  */
 
-class SystemViewModel @Inject constructor(val apiService: ApiService) : BaseViewModel() {
+class SystemViewModel @Inject constructor(private val repository: ProjectRepository,private val context:Context) : BaseViewModel() {
 
     private val _systemList = MutableLiveData(mutableListOf<Chapter>())
     val systemList: MutableLiveData<MutableList<Chapter>>
         get() = _systemList
+
+    var isNetworkConnected=MutableLiveData<Boolean>(true)
 
     init {
         getSystemListData()
     }
 
     fun loadData() {
+
         viewModelScope.launch {
-            val systemListData = apiService.getSystemListData()
+
+            repository.getNetWorkInfo()?.apply {
+                if(!isConnected){
+                    if(isLoadingOrRefresh()) {
+                        stateNoNetwork()
+                    }else{
+                        baseToastString.value=context.getString(R.string.no_network_and_check)
+                    }
+                    return@launch
+                }
+            }
+
+            val systemListData = repository.getSystemListData()
             if (systemListData.errorCode != HttpCode.SUCCESS) {
                 stateError()
                 return@launch

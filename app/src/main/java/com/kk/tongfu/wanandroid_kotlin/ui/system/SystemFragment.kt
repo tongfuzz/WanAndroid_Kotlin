@@ -16,12 +16,9 @@ import com.kk.tongfu.wanandroid_kotlin.util.toast
 import com.kk.tongfu.wanandroid_kotlin.util.viewModelProvider
 import com.kk.tongfu.wanandroid_kotlin.viewmodel.ChapterViewModel
 import com.kk.tongfu.wanandroid_kotlin.viewmodel.SystemViewModel
-import com.scwang.smartrefresh.layout.SmartRefreshLayout
-import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_system.*
 import javax.inject.Inject
 
 /**
@@ -77,10 +74,24 @@ class SystemFragment : DaggerFragment() {
             when (it) {
                 RefreshState.LOADING_ERROR, RefreshState.LOADING_NO_MORE_DATA -> toast(R.string.no_more_data)
                 RefreshState.REFRESHING_ERROR -> toast(R.string.failed_to_refresh)
+                RefreshState.LOADING_NO_NETWORK,RefreshState.REFRESHING_NO_NETWORK->toast(R.string.no_network_and_check)
                 else -> {
                 }
             }
         })
+
+        systemViewModel.isNetworkConnected.observe(this, Observer {
+            if(!it){
+                toast(R.string.no_network_and_retry)
+            }
+        })
+
+        systemViewModel.toastStr.observe(this, Observer {
+            it?.apply {
+                toast(this)
+            }
+        })
+
     }
 
 

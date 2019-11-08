@@ -1,5 +1,7 @@
 package com.kk.tongfu.wanandroid_kotlin.di
 
+import android.content.Context
+import com.kk.tongfu.wanandroid_kotlin.MainApplication
 import com.kk.tongfu.wanandroid_kotlin.service.repository.ApiService
 import com.kk.tongfu.wanandroid_kotlin.service.repository.ProjectRepository
 import dagger.Module
@@ -16,6 +18,11 @@ import javax.inject.Singleton
  */
 @Module
 class AppModule {
+
+    @Provides
+    fun provideContext(application: MainApplication): Context {
+        return application.applicationContext
+    }
 
     @Singleton
     @Provides
@@ -36,7 +43,9 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun privideProjectRepository(apiService: ApiService): ProjectRepository {
+    fun provideProjectRepository(apiService: ApiService,context: Context): ProjectRepository {
         return ProjectRepository(apiService)
     }
+
+
 }

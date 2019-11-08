@@ -80,8 +80,14 @@ class HomePageFragment : DaggerFragment(), ScrollTop {
                 when (it) {
                     RefreshState.LOADING_ERROR, RefreshState.LOADING_NO_MORE_DATA -> toast(R.string.no_more_data)
                     RefreshState.REFRESHING_ERROR -> toast(R.string.failed_to_refresh)
+                    RefreshState.LOADING_NO_NETWORK,RefreshState.REFRESHING_NO_NETWORK->toast(R.string.no_network_and_check)
                     else -> {
                     }
+                }
+            })
+            model.toastStr.observe(this, Observer {
+                it?.apply {
+                    toast(this)
                 }
             })
         }

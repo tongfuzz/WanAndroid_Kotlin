@@ -1,11 +1,8 @@
 package com.kk.tongfu.wanandroid_kotlin.service.repository
 
-import com.kk.tongfu.wanandroid_kotlin.service.model.Article
-import com.kk.tongfu.wanandroid_kotlin.service.model.ArticleList
-import com.kk.tongfu.wanandroid_kotlin.service.model.Banner
-import com.kk.tongfu.wanandroid_kotlin.service.model.BaseResponse
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.kk.tongfu.wanandroid_kotlin.MainApplication
+import com.kk.tongfu.wanandroid_kotlin.service.dao.DaoService
+import com.kk.tongfu.wanandroid_kotlin.service.model.*
 
 /**
  * Created by tongfu
@@ -13,17 +10,29 @@ import javax.inject.Singleton
  * Desc:
  */
 
-class ProjectRepository constructor(private val apiService: ApiService) {
+class ProjectRepository constructor(private val apiService: ApiService) : ApiService, DaoService {
 
-    suspend fun getBannerData(): BaseResponse<MutableList<Banner>?> {
+    override suspend fun getNetWorkInfo(): NetworkInfo? {
+        return MainApplication.database?.daoService()?.getNetWorkInfo()
+    }
+
+    override suspend fun insert(vararg networkInfos: NetworkInfo) {
+        MainApplication.database?.daoService()?.insert(*networkInfos)
+    }
+
+    override suspend fun getSystemListData(): BaseResponse<MutableList<Chapter>?> {
+        return apiService.getSystemListData()
+    }
+
+    override suspend fun getBannerData(): BaseResponse<MutableList<Banner>?> {
         return apiService.getBannerData()
     }
 
-    suspend fun getTopArticleListData(): BaseResponse<MutableList<Article>?> {
+    override suspend fun getTopArticleListData(): BaseResponse<MutableList<Article>?> {
         return apiService.getTopArticleListData()
     }
 
-    suspend fun getArticleListData(pageNum: Int): BaseResponse<ArticleList?> {
+    override suspend fun getArticleListData(pageNum: Int): BaseResponse<ArticleList?> {
         return apiService.getArticleListData(pageNum)
     }
 

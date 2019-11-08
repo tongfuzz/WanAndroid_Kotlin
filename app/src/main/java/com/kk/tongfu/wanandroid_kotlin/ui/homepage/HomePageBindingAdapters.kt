@@ -23,11 +23,11 @@ import com.youth.banner.BannerConfig
 @BindingAdapter("app:refreshState")
 fun setRefreshState(view: SmartRefreshLayout, state: RefreshState) {
     when (state) {
-        RefreshState.LOADING_SUCCESS, RefreshState.LOADING_ERROR,RefreshState.LOADING_NO_MORE_DATA -> {
+        RefreshState.LOADING_SUCCESS, RefreshState.LOADING_ERROR,RefreshState.LOADING_NO_MORE_DATA,RefreshState.LOADING_NO_NETWORK -> {
             view.finishLoadMore()
         }
 
-        RefreshState.REFRESHING_ERROR, RefreshState.REFRESHING_SUCCESS -> {
+        RefreshState.REFRESHING_ERROR, RefreshState.REFRESHING_SUCCESS,RefreshState.REFRESHING_NO_NETWORK -> {
             view.finishRefresh()
         }
 
@@ -57,7 +57,7 @@ fun setTextViewText(view: TextView, loadState: LoadState) {
             view.visibility = View.VISIBLE
         }
         LoadState.NO_NETWORK -> {
-            view.setText(R.string.no_network)
+            view.setText(R.string.no_network_and_retry)
             view.visibility = View.VISIBLE
         }
         LoadState.NO_DATA -> {
