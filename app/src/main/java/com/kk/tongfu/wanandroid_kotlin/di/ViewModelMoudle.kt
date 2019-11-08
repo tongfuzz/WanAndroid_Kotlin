@@ -2,9 +2,10 @@ package com.kk.tongfu.wanandroid_kotlin.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageViewModel
+import com.kk.tongfu.wanandroid_kotlin.viewmodel.HomePageViewModel
 import com.kk.tongfu.wanandroid_kotlin.ui.navigation.NavigationViewModel
 import com.kk.tongfu.wanandroid_kotlin.viewmodel.ProjectViewModelFactory
+import com.kk.tongfu.wanandroid_kotlin.viewmodel.SystemViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -53,18 +54,23 @@ abstract class ViewModelMoudle {
 
     @Binds
     @IntoMap
+    @ViewModelKey(SystemViewModel::class)
+    internal abstract fun bindSystemViewModel(viewModel: SystemViewModel):ViewModel
+
+    @Binds
+    @IntoMap
     @StringKey("haha")
-    internal abstract fun bindStringInfo(viewModel:HomePageViewModel):ViewModel
+    internal abstract fun bindStringInfo(viewModel: HomePageViewModel):ViewModel
 
     @Binds
     @IntoMap
     @StringKey("hehe")
-    internal abstract fun bindStringInfo2(viewModel:HomePageViewModel):ViewModel
+    internal abstract fun bindStringInfo2(viewModel: HomePageViewModel):ViewModel
 
     @Binds
     @IntoMap
     @StringKey("00")
-    internal abstract fun bindStringInfo3(viewModel:HomePageViewModel):ViewModel
+    internal abstract fun bindStringInfo3(viewModel: HomePageViewModel):ViewModel
 
 
    /* @Provides

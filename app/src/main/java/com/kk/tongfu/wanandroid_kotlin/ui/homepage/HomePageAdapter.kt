@@ -2,7 +2,6 @@ package com.kk.tongfu.wanandroid_kotlin.ui.homepage
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +9,7 @@ import com.kk.tongfu.wanandroid_kotlin.databinding.ItemArticleBinding
 import com.kk.tongfu.wanandroid_kotlin.databinding.LayoutBannerBinding
 import com.kk.tongfu.wanandroid_kotlin.service.model.Article
 import com.kk.tongfu.wanandroid_kotlin.service.model.BannerList
+import com.kk.tongfu.wanandroid_kotlin.viewmodel.HomePageAdapterViewModel
 
 /**
  * Created by tongfu
@@ -17,7 +17,7 @@ import com.kk.tongfu.wanandroid_kotlin.service.model.BannerList
  * Desc:
  */
 
-class HomePageAdapter(val listener:HomePageItemClickListener) :
+class HomePageAdapter(val listener:ItemClickListener<HomePageAdapterViewModel>) :
     ListAdapter<Any, RecyclerView.ViewHolder>(ArticleDiff) {
 
     companion object {
@@ -77,7 +77,7 @@ class HomePageAdapter(val listener:HomePageItemClickListener) :
 class ArticleViewHolder(private val binding: ItemArticleBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Article,listener:HomePageItemClickListener) {
+    fun bind(item: Article,listener:ItemClickListener<HomePageAdapterViewModel>) {
         binding.viewModel = HomePageAdapterViewModel(item)
         binding.onClickListener=listener
     }

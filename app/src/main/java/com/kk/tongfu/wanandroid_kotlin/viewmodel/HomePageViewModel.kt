@@ -1,8 +1,6 @@
-package com.kk.tongfu.wanandroid_kotlin.ui.homepage
+package com.kk.tongfu.wanandroid_kotlin.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kk.tongfu.wanandroid_kotlin.service.HttpCode
 import com.kk.tongfu.wanandroid_kotlin.service.LoadState
@@ -19,43 +17,25 @@ import javax.inject.Inject
  */
 
 class HomePageViewModel @Inject constructor(private val apiService: ApiService) :
-    ViewModel() {
+    BaseViewModel() {
 
 
     private val _bannerList: MutableLiveData<BannerList?> = MutableLiveData(BannerList(null))
-    val bannerList: LiveData<BannerList?>
-        get() = _bannerList
 
     private val _articleList: MutableLiveData<MutableList<Any>?> = MutableLiveData()
     val articleList: MutableLiveData<MutableList<Any>?> = _articleList
-
-    /* private val _homepageData: MutableLiveData<HomepageData> =
-         MutableLiveData(HomepageData(bannerList = _bannerList, articleList = _articleList))
-     val homePageData: LiveData<HomepageData>
-         get() = _homepageData*/
-
-    private val _loadState: MutableLiveData<LoadState> = MutableLiveData(LoadState.SUCCESS)
-    val loadState: MutableLiveData<LoadState>
-        get() = _loadState
-
-    private val _refreshState: MutableLiveData<RefreshState> =
-        MutableLiveData(RefreshState.REFRESHING_SUCCESS)
-    val refreshState: LiveData<RefreshState>
-        get() = _refreshState
-
-    val hasMore: MutableLiveData<Boolean> = MutableLiveData(true)
     var pageNum: Int = 0
 
     init {
-        _loadState.value = LoadState.LOADING
+        getHomePageData()
     }
 
+
     //刷新时获取数据
-    fun loadData() {
+    private fun getData() {
         viewModelScope.launch {
 
             pageNum = 0
-            hasMore.value = true
 
             try {
                 val bannerList = apiService.getBannerData()
@@ -63,13 +43,7 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
                 val articleList = apiService.getArticleListData(pageNum)
                 //如果数据没有请求成功
                 if (articleList.errorCode != HttpCode.SUCCESS) {
-                    if (_refreshState.value == RefreshState.REFRESHING) {
-                        //说明是刷新出现了问题
-                        _refreshState.value = RefreshState.REFRESHING_ERROR
-                        return@launch
-                    }
-                    //说明初次加载出现了问题
-                    _loadState.value = LoadState.ERROR
+                    stateError()
                     return@launch
                 }
 
@@ -95,30 +69,28 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
                 val mutableList = articleList.data?.datas as MutableList<Any>
 
                 _articleList.value = mutableList
-                //更新加载状态
-                if (_loadState.value == LoadState.LOADING) {
-                    //如果是初次加载，设置初次加载成功
-                    _loadState.value = LoadState.SUCCESS
-                } else {
-                    //如果是刷新加载，设置刷新加载成功
-                    _refreshState.value = RefreshState.REFRESHING_SUCCESS
-                }
+                stateMain()
             } catch (e: Exception) {
                 println(e.message)
-                _loadState.value = LoadState.NO_NETWORK
-                _refreshState.value = RefreshState.REFRESHING_ERROR
+
+                //stateError()
             }
         }
     }
 
-    fun loadMoreData() {
+    fun loadData() {
 
-        _refreshState.value = RefreshState.LOADING
+        baseRefreshState.value = RefreshState.LOADING
         viewModelScope.launch {
             try {
                 val articleList = apiService.getArticleListData(++pageNum)
                 if (articleList.errorCode != HttpCode.SUCCESS) {
-                    _refreshState.value = RefreshState.LOADING_ERROR
+                    stateError()
+                    return@launch
+                }
+
+                if(pageNum==3){
+                    stateEmpty()
                     return@launch
                 }
 
@@ -126,15 +98,14 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
                     _articleList.value = _articleList.value?.apply {
                         addAll(articleList.data.datas)
                     }
-                    _refreshState.value = RefreshState.LOADING_SUCCESS
+                    stateMain()
                 } else {
-                    _refreshState.value = RefreshState.LOADING_ERROR
-                    hasMore.value = false
+                    stateEmpty()
                 }
             } catch (e: Exception) {
                 println(e.message)
-                _loadState.value = LoadState.NO_NETWORK
-                _refreshState.value = RefreshState.LOADING_ERROR
+                /*baseLoadState.value = LoadState.NO_NETWORK
+                baseRefreshState.value = RefreshState.LOADING_ERROR*/
             }
         }
 
@@ -142,13 +113,17 @@ class HomePageViewModel @Inject constructor(private val apiService: ApiService) 
 
 
     fun refreshData() {
-        _refreshState.value = RefreshState.REFRESHING
-        loadData()
+        if(baseRefreshState.value!=RefreshState.REFRESHING) {
+            baseRefreshState.value = RefreshState.REFRESHING
+            getData()
+        }
     }
 
-    fun clickTvLoading() {
-        if (_loadState.value != LoadState.LOADING) {
-            _loadState.value = LoadState.LOADING
+
+    fun getHomePageData() {
+        if (baseLoadState.value != LoadState.LOADING) {
+            baseLoadState.value = LoadState.LOADING
+            getData()
         }
     }
 

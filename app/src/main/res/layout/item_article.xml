@@ -13,11 +13,11 @@
 
         <variable
             name="viewModel"
-            type="com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageAdapterViewModel" />
+            type="com.kk.tongfu.wanandroid_kotlin.viewmodel.HomePageAdapterViewModel" />
 
         <variable
             name="onClickListener"
-            type="com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageItemClickListener" />
+            type="com.kk.tongfu.wanandroid_kotlin.ui.homepage.ItemClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -28,7 +28,7 @@
         android:layout_marginRight="12dp"
         android:layout_marginBottom="6dp"
         android:orientation="vertical"
-        android:onClick="@{(view)->onClickListener.onArticleItemClick(view,viewModel)}"
+        android:onClick="@{(view)->onClickListener.onItemClick(view,viewModel)}"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout

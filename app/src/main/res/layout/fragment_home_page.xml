@@ -12,9 +12,11 @@
 
         <import type="com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener"></import>
 
+        <import type="com.kk.tongfu.wanandroid_kotlin.service.RefreshState"></import>
+
         <variable
             name="viewModel"
-            type="com.kk.tongfu.wanandroid_kotlin.ui.homepage.HomePageViewModel" />
+            type="com.kk.tongfu.wanandroid_kotlin.viewmodel.HomePageViewModel" />
 
         <variable
             name="refreshLis"
@@ -31,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:onClick="@{()->viewModel.clickTvLoading()}"
+            android:onClick="@{()->viewModel.getHomePageData()}"
             app:textInfoAndVisiable="@{viewModel.loadState}"></TextView>
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
@@ -39,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{viewModel.loadState.equals(LoadState.SUCCESS)?View.VISIBLE:View.GONE}"
-            app:enableLoadMore="@{viewModel.hasMore.booleanValue()}"
+            app:enableLoadMore="@{!viewModel.refreshState.equals(RefreshState.LOADING_NO_MORE_DATA)}"
             app:onRefreshLoadMoreListener="@{refreshLis}"
             app:refreshState="@{viewModel.refreshState}">
 

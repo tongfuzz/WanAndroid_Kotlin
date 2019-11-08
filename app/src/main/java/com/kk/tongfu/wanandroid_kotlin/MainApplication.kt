@@ -1,7 +1,12 @@
 package com.kk.tongfu.wanandroid_kotlin
 
 import android.app.Application
+import android.content.Context
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import com.kk.tongfu.wanandroid_kotlin.di.DaggerAppComponent
+import com.kk.tongfu.wanandroid_kotlin.receiver.NetworkStatusReceiver
+import com.kk.tongfu.wanandroid_kotlin.util.isNetWrokConnected
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -14,7 +19,7 @@ import javax.inject.Inject
  * Desc:
  */
 
- class MainApplication : Application(), HasAndroidInjector {
+class MainApplication : Application(), HasAndroidInjector {
 
 
     @Inject
@@ -24,20 +29,24 @@ import javax.inject.Inject
     override fun onCreate() {
         super.onCreate()
         DaggerAppComponent.builder().application(this).build().inject(this)
-        application=this
-
+        application = this
+        appContext = this
+        val receiver=NetworkStatusReceiver()
+        val intentFilter=IntentFilter()
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(receiver,intentFilter)
     }
 
     override fun androidInjector(): AndroidInjector<Any> {
         return dispatchingAndroidInjector
     }
 
-    companion object{
+    companion object {
 
         @JvmField
-        val appContext=this
+        var appContext: Context? = null
 
         @JvmField
-        var application:Application?=null
+        var application: Application? = null
     }
 }

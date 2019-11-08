@@ -1,14 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.system.SystemFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+        <import type="com.kk.tongfu.wanandroid_kotlin.service.LoadState"></import>
+
+        <import type="androidx.recyclerview.widget.LinearLayoutManager"></import>
+
+        <import type="android.view.View"></import>
+
+        <variable
+            name="viewModel"
+            type="com.kk.tongfu.wanandroid_kotlin.viewmodel.SystemViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/system" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="@{()->viewModel.loadData()}"
+            android:gravity="center"
+            app:textInfoAndVisiable="@{viewModel.loadState}" />
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewModel.loadState.equals(LoadState.SUCCESS)?View.VISIBLE:View.GONE}"
+            app:enableLoadMore="@{false}"
+            app:refreshState="@{viewModel.refreshState}"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layoutManager="LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </FrameLayout>
+
+</layout>
+

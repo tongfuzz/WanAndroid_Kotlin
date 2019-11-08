@@ -1,4 +1,4 @@
-package com.kk.tongfu.wanandroid_kotlin.ui.homepage
+package com.kk.tongfu.wanandroid_kotlin.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

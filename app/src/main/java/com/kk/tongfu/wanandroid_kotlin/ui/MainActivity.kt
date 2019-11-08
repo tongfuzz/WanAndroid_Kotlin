@@ -1,5 +1,7 @@
 package com.kk.tongfu.wanandroid_kotlin.ui
 
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.LiveData
@@ -13,6 +15,7 @@ import com.kk.tongfu.wanandroid_kotlin.util.setupWithNavController
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
+import java.security.Permission
 
 class MainActivity : DaggerAppCompatActivity() {
 
@@ -39,9 +42,9 @@ class MainActivity : DaggerAppCompatActivity() {
             if(fragment is ScrollTop){
                 fragment.scrollTop()
             }
-
         }
     }
+
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)

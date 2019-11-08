@@ -2,39 +2,95 @@ package com.kk.tongfu.wanandroid_kotlin.ui.system
 
 
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.kk.tongfu.wanandroid_kotlin.R
-import kotlinx.coroutines.*
-import kotlin.system.measureTimeMillis
+import com.kk.tongfu.wanandroid_kotlin.databinding.FragmentSystemBinding
+import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
+import com.kk.tongfu.wanandroid_kotlin.ui.homepage.ItemClickListener
+import com.kk.tongfu.wanandroid_kotlin.util.toast
+import com.kk.tongfu.wanandroid_kotlin.util.viewModelProvider
+import com.kk.tongfu.wanandroid_kotlin.viewmodel.ChapterViewModel
+import com.kk.tongfu.wanandroid_kotlin.viewmodel.SystemViewModel
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.header.ClassicsHeader
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener
+import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_system.*
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
-class SystemFragment : Fragment() {
+class SystemFragment : DaggerFragment() {
 
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var systemViewModel: SystemViewModel
+    private lateinit var binding: FragmentSystemBinding
+    private var systemView: View? = null
+    private var listener=object:ItemClickListener<ChapterViewModel>{
+
+        override fun onItemClick(view: View, item: ChapterViewModel) {
+
+        }
+    }
+
+    private var refreshListener= OnRefreshListener { systemViewModel.refreshSystemListData() }
+    private var adapter=SystemAdapter(listener)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_system, container, false)
+        if (systemView == null) {
+            binding = FragmentSystemBinding.inflate(inflater, container, false).apply {
+                systemView = root
+            }
+        }
+        return systemView
     }
 
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        systemViewModel = viewModelProvider(viewModelFactory)
+        binding.apply {
+            lifecycleOwner=viewLifecycleOwner
+            viewModel=systemViewModel
+            recyclerView.adapter=adapter
+            refreshLayout.setRefreshHeader(ClassicsHeader(context))
+            refreshLayout.setOnRefreshListener(refreshListener)
+        }
+        systemViewModel.systemList.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+        })
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+        systemViewModel.refreshState.observe(this, Observer {
+            when (it) {
+                RefreshState.LOADING_ERROR, RefreshState.LOADING_NO_MORE_DATA -> toast(R.string.no_more_data)
+                RefreshState.REFRESHING_ERROR -> toast(R.string.failed_to_refresh)
+                else -> {
+                }
+            }
+        })
+    }
+
+
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("SystemFragment","onCreate")
 
-       /* main1()
+       *//* main1()
         println(coroutines())
-        main2()*/
+        main2()*//*
 
         main3()
 
@@ -128,7 +184,7 @@ class SystemFragment : Fragment() {
         println("method two invoked")
         delay(3000)
         return 2
-    }
+    }*/
 
 
 }

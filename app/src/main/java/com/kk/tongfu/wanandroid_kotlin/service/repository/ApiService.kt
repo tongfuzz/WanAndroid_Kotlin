@@ -1,9 +1,6 @@
 package com.kk.tongfu.wanandroid_kotlin.service.repository
 
-import com.kk.tongfu.wanandroid_kotlin.service.model.Article
-import com.kk.tongfu.wanandroid_kotlin.service.model.ArticleList
-import com.kk.tongfu.wanandroid_kotlin.service.model.Banner
-import com.kk.tongfu.wanandroid_kotlin.service.model.BaseResponse
+import com.kk.tongfu.wanandroid_kotlin.service.model.*
 import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.http.GET
@@ -25,5 +22,9 @@ interface ApiService {
 
     @GET("article/list/{pageNum}/json")
     suspend fun getArticleListData(@Path("pageNum") pageNum: Int): BaseResponse<ArticleList?>
+
+    @GET("tree/json")
+    suspend fun getSystemListData():BaseResponse<MutableList<Chapter>?>
+
 
 }
