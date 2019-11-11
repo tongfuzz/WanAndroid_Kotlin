@@ -1,13 +1,13 @@
 package com.kk.tongfu.wanandroid_kotlin.viewmodel
 
-import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.kk.tongfu.wanandroid_kotlin.R
 import com.kk.tongfu.wanandroid_kotlin.service.HttpCode
 import com.kk.tongfu.wanandroid_kotlin.service.LoadState
 import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
 import com.kk.tongfu.wanandroid_kotlin.service.model.BannerList
+import com.kk.tongfu.wanandroid_kotlin.service.model.NetworkInfo
 import com.kk.tongfu.wanandroid_kotlin.service.repository.ProjectRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +18,9 @@ import javax.inject.Inject
  * Desc:
  */
 
-class HomePageViewModel @Inject constructor(private val repository: ProjectRepository,private val  context:Context) :
+class HomePageViewModel @Inject constructor(
+    private val repository: ProjectRepository
+) :
     BaseViewModel() {
 
 
@@ -28,59 +30,60 @@ class HomePageViewModel @Inject constructor(private val repository: ProjectRepos
     val articleList: MutableLiveData<MutableList<Any>?> = _articleList
     var pageNum: Int = 0
 
+    private val _netWorkInfo = MutableLiveData<NetworkInfo>()
+    val netWorkInfo: LiveData<NetworkInfo>
+        get() = _netWorkInfo
+
+
     init {
+        _netWorkInfo.value = repository.getNetWorkInfo()?.value
         getHomePageData()
     }
 
 
     //刷新时获取数据
     private fun getData() {
+
         viewModelScope.launch {
 
-            pageNum = 0
-            repository.getNetWorkInfo()?.apply {
-                if(!isConnected){
-                    if(isLoadingOrRefresh()) {
-                        stateNoNetwork()
-                    }else{
-                        baseToastString.value=context.getString(R.string.no_network_and_check)
-                    }
+            try {
+                pageNum = 0
+                val bannerList = repository.getBannerData()
+                val topArticleListData = repository.getTopArticleListData()
+                val articleList = repository.getArticleListData(pageNum)
+                //如果数据没有请求成功
+                if (articleList.errorCode != HttpCode.SUCCESS) {
+                    stateError()
                     return@launch
                 }
-            }
 
-            val bannerList = repository.getBannerData()
-            val topArticleListData = repository.getTopArticleListData()
-            val articleList = repository.getArticleListData(pageNum)
-            //如果数据没有请求成功
-            if (articleList.errorCode != HttpCode.SUCCESS) {
-                stateError()
-                return@launch
-            }
+                //如果数据请求成功
+                val data = topArticleListData.data
+                if (topArticleListData.errorCode == HttpCode.SUCCESS && data != null && data.isNotEmpty()) {
+                    for (article in data) {
+                        article.top = true
+                    }
 
-            //如果数据请求成功
-            val data = topArticleListData.data
-            if (topArticleListData.errorCode == HttpCode.SUCCESS && data != null && data.isNotEmpty()) {
-                for (article in data) {
-                    article.top = true
+                    if (articleList.data != null) {
+                        articleList.data.datas.addAll(0, data)
+                    }
                 }
 
-                if (articleList.data != null) {
-                    articleList.data.datas.addAll(0, data)
+
+                //设置数据
+                _bannerList.value?.data = bannerList.data
+                if (bannerList.errorCode == HttpCode.SUCCESS && bannerList.data != null && bannerList.data.isNotEmpty()) {
+                    (articleList.data?.datas as MutableList<Any>).add(0, _bannerList.value as Any)
                 }
+
+                val mutableList = articleList.data?.datas as MutableList<Any>
+
+                _articleList.value = mutableList
+                stateMain()
+            } catch (e: Exception) {
+                baseToastString.value = e.message
             }
 
-
-            //设置数据
-            _bannerList.value?.data = bannerList.data
-            if (bannerList.errorCode == HttpCode.SUCCESS && bannerList.data != null && bannerList.data.isNotEmpty()) {
-                (articleList.data?.datas as MutableList<Any>).add(0, _bannerList.value as Any)
-            }
-
-            val mutableList = articleList.data?.datas as MutableList<Any>
-
-            _articleList.value = mutableList
-            stateMain()
         }
     }
 

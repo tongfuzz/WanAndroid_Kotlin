@@ -1,5 +1,7 @@
 package com.kk.tongfu.wanandroid_kotlin.service.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.kk.tongfu.wanandroid_kotlin.MainApplication
 import com.kk.tongfu.wanandroid_kotlin.service.dao.DaoService
 import com.kk.tongfu.wanandroid_kotlin.service.model.*
@@ -12,9 +14,10 @@ import com.kk.tongfu.wanandroid_kotlin.service.model.*
 
 class ProjectRepository constructor(private val apiService: ApiService) : ApiService, DaoService {
 
-    override suspend fun getNetWorkInfo(): NetworkInfo? {
+    override  fun getNetWorkInfo(): LiveData<NetworkInfo>? {
         return MainApplication.database?.daoService()?.getNetWorkInfo()
     }
+
 
     override suspend fun insert(vararg networkInfos: NetworkInfo) {
         MainApplication.database?.daoService()?.insert(*networkInfos)

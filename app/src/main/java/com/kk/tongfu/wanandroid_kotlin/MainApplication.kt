@@ -4,10 +4,12 @@ import android.app.Application
 import android.content.Context
 import android.content.IntentFilter
 import android.net.ConnectivityManager
+import androidx.databinding.BindingAdapter
 import androidx.room.Room.*
 import com.kk.tongfu.wanandroid_kotlin.di.DaggerAppComponent
 import com.kk.tongfu.wanandroid_kotlin.receiver.NetworkStatusReceiver
 import com.kk.tongfu.wanandroid_kotlin.service.db.AppDatabase
+import com.kk.tongfu.wanandroid_kotlin.util.checkNetWorkStatus
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -33,6 +35,9 @@ class MainApplication : Application(), HasAndroidInjector {
         application = this
         appContext = this
         DaggerAppComponent.builder().application(this).build().inject(this)
+
+        //添加网络监听
+        checkNetWorkStatus()
         val receiver=NetworkStatusReceiver()
         val intentFilter=IntentFilter()
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
@@ -54,4 +59,5 @@ class MainApplication : Application(), HasAndroidInjector {
         @JvmField
         var database:AppDatabase?=null
     }
+
 }

@@ -90,6 +90,17 @@ class HomePageFragment : DaggerFragment(), ScrollTop {
                     toast(this)
                 }
             })
+
+            model.netWorkInfo?.observe(this, Observer {
+                it?.also {
+                    if(!it.isConnected){
+                        if(model.isLoadingOrRefresh()){
+                            model.stateNoNetwork()
+                        }
+                        toast(R.string.no_network_and_check)
+                    }
+                }
+            })
         }
 
         return homepageView

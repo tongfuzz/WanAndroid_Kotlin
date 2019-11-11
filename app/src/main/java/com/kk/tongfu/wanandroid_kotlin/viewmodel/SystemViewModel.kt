@@ -34,7 +34,7 @@ class SystemViewModel @Inject constructor(private val repository: ProjectReposit
 
         viewModelScope.launch {
 
-            repository.getNetWorkInfo()?.apply {
+            /*repository.getNetWorkInfo()?.apply {
                 if(!isConnected){
                     if(isLoadingOrRefresh()) {
                         stateNoNetwork()
@@ -43,7 +43,7 @@ class SystemViewModel @Inject constructor(private val repository: ProjectReposit
                     }
                     return@launch
                 }
-            }
+            }*/
 
             val systemListData = repository.getSystemListData()
             if (systemListData.errorCode != HttpCode.SUCCESS) {
