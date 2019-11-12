@@ -1,6 +1,7 @@
 package com.kk.tongfu.wanandroid_kotlin.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.kk.tongfu.wanandroid_kotlin.service.model.Chapter
 
 /**
@@ -9,7 +10,7 @@ import com.kk.tongfu.wanandroid_kotlin.service.model.Chapter
  * Desc:
  */
 
-class ChapterViewModel(item: Chapter) : BaseViewModel() {
+class ChapterViewModel(item: Chapter) : ViewModel() {
 
     var courseId = MutableLiveData<Int>(item.courseId)
     var id = MutableLiveData(item.id)

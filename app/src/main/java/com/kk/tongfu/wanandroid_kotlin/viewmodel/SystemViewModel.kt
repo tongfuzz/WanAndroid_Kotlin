@@ -9,6 +9,7 @@ import com.kk.tongfu.wanandroid_kotlin.service.LoadState
 import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
 import com.kk.tongfu.wanandroid_kotlin.service.model.Chapter
 import com.kk.tongfu.wanandroid_kotlin.service.repository.ProjectRepository
+import com.kk.tongfu.wanandroid_kotlin.util.getNetWorkData
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,13 +19,11 @@ import javax.inject.Inject
  * Desc:
  */
 
-class SystemViewModel @Inject constructor(private val repository: ProjectRepository,private val context:Context) : BaseViewModel() {
+class SystemViewModel @Inject constructor(private val repository: ProjectRepository,appContext:Context) : BaseViewModel(appContext) {
 
     private val _systemList = MutableLiveData(mutableListOf<Chapter>())
     val systemList: MutableLiveData<MutableList<Chapter>>
         get() = _systemList
-
-    var isNetworkConnected=MutableLiveData<Boolean>(true)
 
     init {
         getSystemListData()
@@ -32,23 +31,11 @@ class SystemViewModel @Inject constructor(private val repository: ProjectReposit
 
     fun loadData() {
 
-        viewModelScope.launch {
-
-            /*repository.getNetWorkInfo()?.apply {
-                if(!isConnected){
-                    if(isLoadingOrRefresh()) {
-                        stateNoNetwork()
-                    }else{
-                        baseToastString.value=context.getString(R.string.no_network_and_check)
-                    }
-                    return@launch
-                }
-            }*/
-
+        getNetWorkData {
             val systemListData = repository.getSystemListData()
             if (systemListData.errorCode != HttpCode.SUCCESS) {
                 stateError()
-                return@launch
+                return@getNetWorkData
             }
             if (systemListData.data != null && systemListData.data.isNotEmpty()) {
                 _systemList.value = systemListData.data
@@ -60,15 +47,15 @@ class SystemViewModel @Inject constructor(private val repository: ProjectReposit
     }
 
     fun refreshSystemListData() {
-        if(baseRefreshState.value!=RefreshState.REFRESHING) {
-            baseRefreshState.value = RefreshState.REFRESHING
+        if(!isStateRefreshing()) {
+            stateRefreshing()
             loadData()
         }
     }
 
     private fun getSystemListData(){
-        if(baseLoadState.value!=LoadState.LOADING) {
-            baseLoadState.value = LoadState.LOADING
+        if(!isStateLoading()) {
+            stateLoading()
             loadData()
         }
     }

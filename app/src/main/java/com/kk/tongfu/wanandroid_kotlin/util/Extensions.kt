@@ -15,11 +15,9 @@ import androidx.lifecycle.viewModelScope
 import com.kk.tongfu.wanandroid_kotlin.MainApplication
 import com.kk.tongfu.wanandroid_kotlin.service.model.BaseResponse
 import com.kk.tongfu.wanandroid_kotlin.service.model.NetworkInfo
-import com.kk.tongfu.wanandroid_kotlin.service.repository.ProjectRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.kk.tongfu.wanandroid_kotlin.viewmodel.BaseViewModel
+import kotlinx.coroutines.*
+import java.net.UnknownHostException
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -104,15 +102,19 @@ fun Activity.toast(@StringRes info: Int) {
     Toast.makeText(this, info, Toast.LENGTH_SHORT).show()
 }
 
-fun ViewModel.getNetWorkData(
+fun BaseViewModel.getNetWorkData(
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
 ) {
-    try {
-        viewModelScope.launch(context, start, block)
-    } catch (e: Exception) {
-        println(e.message)
+
+    val coroutineExceptionHandler = CoroutineExceptionHandler { context, throwable ->
+        when (throwable) {
+            is UnknownHostException -> {
+                  stateNoNetwork()
+            }
+        }
     }
+    viewModelScope.launch(coroutineExceptionHandler, start, block)
 }
 

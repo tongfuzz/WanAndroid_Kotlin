@@ -18,7 +18,6 @@ class ProjectRepository constructor(private val apiService: ApiService) : ApiSer
         return MainApplication.database?.daoService()?.getNetWorkInfo()
     }
 
-
     override suspend fun insert(vararg networkInfos: NetworkInfo) {
         MainApplication.database?.daoService()?.insert(*networkInfos)
     }

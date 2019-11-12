@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kk.tongfu.wanandroid_kotlin.R
 import com.kk.tongfu.wanandroid_kotlin.databinding.FragmentSystemBinding
+import com.kk.tongfu.wanandroid_kotlin.interfaces.ScrollTop
 import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
 import com.kk.tongfu.wanandroid_kotlin.ui.homepage.ItemClickListener
 import com.kk.tongfu.wanandroid_kotlin.util.toast
@@ -24,8 +25,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class SystemFragment : DaggerFragment() {
-
+class SystemFragment : DaggerFragment(),ScrollTop {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -80,18 +80,16 @@ class SystemFragment : DaggerFragment() {
             }
         })
 
-        systemViewModel.isNetworkConnected.observe(this, Observer {
-            if(!it){
-                toast(R.string.no_network_and_retry)
-            }
-        })
-
         systemViewModel.toastStr.observe(this, Observer {
             it?.apply {
                 toast(this)
             }
         })
 
+    }
+
+    override fun scrollTop() {
+        binding?.recyclerView?.smoothScrollToPosition(0)
     }
 
 
