@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kk.tongfu.wanandroid_kotlin.R
+import com.kk.tongfu.wanandroid_kotlin.ui.system.SystemFragment
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -15,6 +16,17 @@ import javax.inject.Inject
  * A simple [Fragment] subclass.
  */
 class NavigationFragment : DaggerFragment() {
+
+
+    companion object{
+        private  var navigationFragment: NavigationFragment?=null
+        fun getInstance(): NavigationFragment {
+            if(navigationFragment==null){
+                navigationFragment= NavigationFragment()
+            }
+            return navigationFragment!!
+        }
+    }
 
     @Inject
     lateinit var viewModel: NavigationViewModel

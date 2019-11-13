@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.MutableLiveData
 import com.kk.tongfu.wanandroid_kotlin.R
 import com.kk.tongfu.wanandroid_kotlin.service.LoadState
 import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
@@ -20,7 +21,7 @@ import com.youth.banner.BannerConfig
  * Desc：进行适配器的绑定
  */
 
-@BindingAdapter("app:refreshState")
+@BindingAdapter("refreshState")
 fun setRefreshState(view: SmartRefreshLayout, state: RefreshState) {
     when (state) {
         RefreshState.LOADING_SUCCESS, RefreshState.LOADING_ERROR,RefreshState.LOADING_NO_MORE_DATA,RefreshState.LOADING_NO_NETWORK -> {
@@ -35,17 +36,17 @@ fun setRefreshState(view: SmartRefreshLayout, state: RefreshState) {
     }
 }
 
-@BindingAdapter("app:onRefreshLoadMoreListener")
+@BindingAdapter("onRefreshLoadMoreListener")
 fun setRefreshListener(view: SmartRefreshLayout, listener: OnRefreshLoadMoreListener) {
     view.setOnRefreshLoadMoreListener(listener)
 }
 
-@BindingAdapter("app:enableLoadMore")
+@BindingAdapter("enableLoadMore")
 fun setEnableLoadMore(view: SmartRefreshLayout, enableLoadMore: Boolean) {
     view.setEnableLoadMore(enableLoadMore)
 }
 
-@BindingAdapter("app:textInfoAndVisiable")
+@BindingAdapter("textInfoAndVisiable" )
 fun setTextViewText(view: TextView, loadState: LoadState) {
     when (loadState) {
         LoadState.LOADING -> {
@@ -71,7 +72,7 @@ fun setTextViewText(view: TextView, loadState: LoadState) {
     }
 }
 
-@BindingAdapter("app:bannerItems")
+@BindingAdapter("bannerItems")
 fun setBannerList(banner:Banner,bannerList: BannerList){
     val images = bannerList.data?.map {
         it.imagePath

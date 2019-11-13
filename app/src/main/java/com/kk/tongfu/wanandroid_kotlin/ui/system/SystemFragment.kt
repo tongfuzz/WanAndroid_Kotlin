@@ -25,47 +25,49 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class SystemFragment : DaggerFragment(),ScrollTop {
+class SystemFragment : DaggerFragment(), ScrollTop {
+
+    companion object {
+        private var systemFragment: SystemFragment? = null
+        fun getInstance(): SystemFragment {
+            if (systemFragment == null) {
+                systemFragment = SystemFragment()
+            }
+            return systemFragment!!
+        }
+    }
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-
     private lateinit var systemViewModel: SystemViewModel
     private lateinit var binding: FragmentSystemBinding
-    private var systemView: View? = null
-    private var listener=object:ItemClickListener<ChapterViewModel>{
+    private var listener = object : ItemClickListener<ChapterViewModel> {
 
         override fun onItemClick(view: View, item: ChapterViewModel) {
 
         }
     }
 
-    private var refreshListener= OnRefreshListener { systemViewModel.refreshSystemListData() }
-    private var adapter=SystemAdapter(listener)
+    private var refreshListener = OnRefreshListener { systemViewModel.refreshSystemListData() }
+    private var adapter = SystemAdapter(listener)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (systemView == null) {
-            binding = FragmentSystemBinding.inflate(inflater, container, false).apply {
-                systemView = root
-            }
-        }
-        return systemView
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         systemViewModel = viewModelProvider(viewModelFactory)
-        binding.apply {
-            lifecycleOwner=viewLifecycleOwner
-            viewModel=systemViewModel
-            recyclerView.adapter=adapter
+        binding = FragmentSystemBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = systemViewModel
+            recyclerView.adapter = adapter
             refreshLayout.setRefreshHeader(ClassicsHeader(context))
             refreshLayout.setOnRefreshListener(refreshListener)
         }
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         systemViewModel.systemList.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
@@ -74,7 +76,7 @@ class SystemFragment : DaggerFragment(),ScrollTop {
             when (it) {
                 RefreshState.LOADING_ERROR, RefreshState.LOADING_NO_MORE_DATA -> toast(R.string.no_more_data)
                 RefreshState.REFRESHING_ERROR -> toast(R.string.failed_to_refresh)
-                RefreshState.LOADING_NO_NETWORK,RefreshState.REFRESHING_NO_NETWORK->toast(R.string.no_network_and_check)
+                RefreshState.LOADING_NO_NETWORK, RefreshState.REFRESHING_NO_NETWORK -> toast(R.string.no_network_and_check)
                 else -> {
                 }
             }
@@ -85,11 +87,12 @@ class SystemFragment : DaggerFragment(),ScrollTop {
                 toast(this)
             }
         })
-
     }
 
     override fun scrollTop() {
+        //todo 滑动距离不准确的问题需要处理一下
         binding?.recyclerView?.smoothScrollToPosition(0)
+
     }
 
 

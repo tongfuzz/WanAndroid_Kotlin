@@ -8,11 +8,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kk.tongfu.wanandroid_kotlin.R
+import com.kk.tongfu.wanandroid_kotlin.ui.navigation.NavigationFragment
 
 /**
  * A simple [Fragment] subclass.
  */
 class ProjectFragment : Fragment() {
+
+    companion object{
+        private  var projectFragment: ProjectFragment?=null
+        fun getInstance(): ProjectFragment {
+            if(projectFragment==null){
+                projectFragment= ProjectFragment()
+            }
+            return projectFragment!!
+        }
+    }
 
 
     override fun onCreateView(

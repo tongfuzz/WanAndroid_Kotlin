@@ -14,10 +14,10 @@ import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
  * Desc:
  */
 
-open class BaseViewModel(private val appContext: Context) : ViewModel() {
+open class BaseViewModel(val appContext: Context) : ViewModel() {
 
     protected val baseLoadState: MutableLiveData<LoadState> = MutableLiveData(LoadState.SUCCESS)
-    val loadState: MutableLiveData<LoadState>
+    val loadState: LiveData<LoadState>
         get() = baseLoadState
 
     protected val baseRefreshState: MutableLiveData<RefreshState> =

@@ -29,8 +29,7 @@ class SystemViewModel @Inject constructor(private val repository: ProjectReposit
         getSystemListData()
     }
 
-    fun loadData() {
-
+    private fun loadData() {
         getNetWorkData {
             val systemListData = repository.getSystemListData()
             if (systemListData.errorCode != HttpCode.SUCCESS) {
@@ -53,7 +52,7 @@ class SystemViewModel @Inject constructor(private val repository: ProjectReposit
         }
     }
 
-    private fun getSystemListData(){
+    fun getSystemListData(){
         if(!isStateLoading()) {
             stateLoading()
             loadData()

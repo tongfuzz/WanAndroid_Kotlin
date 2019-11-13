@@ -16,6 +16,7 @@ class GlideImageLoader : ImageLoader() {
 
         @JvmStatic
         fun loadImage(context: Context, path: Any, imageView: ImageView) {
+            imageView.scaleType=ImageView.ScaleType.FIT_XY
             Glide.with(context).load(path).into(imageView)
         }
     }

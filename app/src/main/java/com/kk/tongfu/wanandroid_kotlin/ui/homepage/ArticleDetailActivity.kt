@@ -21,15 +21,16 @@ import kotlinx.android.synthetic.main.layout_toolbar.*
 
 class ArticleDetailActivity : DaggerAppCompatActivity() {
 
-    private val args: ArticleDetailActivityArgs by navArgs()
-
+    companion object{
+        const val URL_PATH="url_path"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView<ActivityDetailBinding>(this, R.layout.activity_detail)
         setSupportActionBar(toolBar)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        args.url.apply {
+        intent.extras?.getString(URL_PATH)?.apply {
             webview.webChromeClient = object : WebChromeClient() {
                 override fun onReceivedTitle(view: WebView?, title: String?) {
                     super.onReceivedTitle(view, title)
