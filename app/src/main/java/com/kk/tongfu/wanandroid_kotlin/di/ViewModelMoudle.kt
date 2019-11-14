@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.kk.tongfu.wanandroid_kotlin.viewmodel.HomePageViewModel
 import com.kk.tongfu.wanandroid_kotlin.ui.navigation.NavigationViewModel
+import com.kk.tongfu.wanandroid_kotlin.viewmodel.ArticleListViewModel
 import com.kk.tongfu.wanandroid_kotlin.viewmodel.ProjectViewModelFactory
 import com.kk.tongfu.wanandroid_kotlin.viewmodel.SystemViewModel
 import dagger.Binds
@@ -56,6 +57,11 @@ abstract class ViewModelMoudle {
     @IntoMap
     @ViewModelKey(SystemViewModel::class)
     internal abstract fun bindSystemViewModel(viewModel: SystemViewModel):ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ArticleListViewModel::class)
+    internal abstract fun bindArticleListViewModel(viewModel:ArticleListViewModel):ViewModel
 
     @Binds
     @IntoMap

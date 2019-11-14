@@ -26,15 +26,10 @@ class HomePageViewModel @Inject constructor(
     private val _bannerList: MutableLiveData<BannerList?> = MutableLiveData(BannerList(null))
     private val _articleList: MutableLiveData<MutableList<Any>?> = MutableLiveData()
     val articleList: MutableLiveData<MutableList<Any>?> = _articleList
-    var pageNum: Int = 0
-
-    private val _netWorkInfo = MutableLiveData<NetworkInfo>()
-    val netWorkInfo: LiveData<NetworkInfo>
-        get() = _netWorkInfo
+    var pageNum: Int = 1
 
 
     init {
-        _netWorkInfo.value = repository.getNetWorkInfo()?.value
         getHomePageData()
     }
 
@@ -43,7 +38,7 @@ class HomePageViewModel @Inject constructor(
     private fun getData() {
 
         getNetWorkData {
-            pageNum = 0
+            pageNum = 1
             val bannerList = repository.getBannerData()
             val topArticleListData = repository.getTopArticleListData()
             val articleList = repository.getArticleListData(pageNum)
@@ -82,7 +77,7 @@ class HomePageViewModel @Inject constructor(
 
         stateLoadmore()
         getNetWorkData {
-            val articleList = repository.getArticleListData(++pageNum)
+            val articleList = repository.getArticleListData(pageNum+1)
             if (articleList.errorCode != HttpCode.SUCCESS) {
                 stateError()
                 return@getNetWorkData
@@ -92,6 +87,7 @@ class HomePageViewModel @Inject constructor(
                 _articleList.value = _articleList.value?.apply {
                     addAll(articleList.data.datas)
                 }
+                pageNum += 1
                 stateMain()
             } else {
                 stateEmpty()

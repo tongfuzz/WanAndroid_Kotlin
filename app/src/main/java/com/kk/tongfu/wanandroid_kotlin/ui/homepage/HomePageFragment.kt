@@ -7,15 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.kk.tongfu.wanandroid_kotlin.R
 import com.kk.tongfu.wanandroid_kotlin.databinding.FragmentHomePageBinding
-import com.kk.tongfu.wanandroid_kotlin.di.Constant
 import com.kk.tongfu.wanandroid_kotlin.interfaces.ScrollTop
 import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
 import com.kk.tongfu.wanandroid_kotlin.util.toast
 import com.kk.tongfu.wanandroid_kotlin.util.viewModelProvider
-import com.kk.tongfu.wanandroid_kotlin.viewmodel.HomePageAdapterViewModel
+import com.kk.tongfu.wanandroid_kotlin.viewmodel.ArticleAdapterViewModel
 import com.kk.tongfu.wanandroid_kotlin.viewmodel.HomePageViewModel
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
@@ -52,8 +50,8 @@ class HomePageFragment : DaggerFragment(), ScrollTop {
 
     }
 
-    private val onClickListener = object : ItemClickListener<HomePageAdapterViewModel> {
-        override fun onItemClick(view: View, viewModel: HomePageAdapterViewModel) {
+    private val onClickListener = object : ItemClickListener<ArticleAdapterViewModel> {
+        override fun onItemClick(view: View, viewModel: ArticleAdapterViewModel) {
             val bundle = Bundle().apply {
                 putString(ArticleDetailActivity.URL_PATH, viewModel.url)
             }
@@ -61,7 +59,7 @@ class HomePageFragment : DaggerFragment(), ScrollTop {
         }
     }
 
-    private var adapter = HomePageAdapter(onClickListener)
+    private var adapter = ArticleListAdapter(onClickListener)
 
 
     override fun onCreateView(
@@ -90,7 +88,7 @@ class HomePageFragment : DaggerFragment(), ScrollTop {
             adapter.submitList(it.toMutableList())
         })
 
-        model.refreshState.observe(this, Observer {
+       /* model.refreshState.observe(this, Observer {
             when (it) {
                 RefreshState.LOADING_ERROR, RefreshState.LOADING_NO_MORE_DATA -> toast(R.string.no_more_data)
                 RefreshState.REFRESHING_ERROR -> toast(R.string.failed_to_refresh)
@@ -98,7 +96,7 @@ class HomePageFragment : DaggerFragment(), ScrollTop {
                 else -> {
                 }
             }
-        })
+        })*/
         model.toastStr.observe(this, Observer {
             it?.apply {
                 toast(this)

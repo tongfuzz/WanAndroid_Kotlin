@@ -24,6 +24,7 @@ import com.youth.banner.BannerConfig
 @BindingAdapter("refreshState")
 fun setRefreshState(view: SmartRefreshLayout, state: RefreshState) {
     when (state) {
+
         RefreshState.LOADING_SUCCESS, RefreshState.LOADING_ERROR,RefreshState.LOADING_NO_MORE_DATA,RefreshState.LOADING_NO_NETWORK -> {
             view.finishLoadMore()
         }

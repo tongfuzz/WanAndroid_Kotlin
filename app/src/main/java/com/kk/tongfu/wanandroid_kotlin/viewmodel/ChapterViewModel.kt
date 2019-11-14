@@ -10,7 +10,7 @@ import com.kk.tongfu.wanandroid_kotlin.service.model.Chapter
  * Desc:
  */
 
-class ChapterViewModel(item: Chapter) : ViewModel() {
+class ChapterViewModel(val item: Chapter) : ViewModel() {
 
     var courseId = MutableLiveData<Int>(item.courseId)
     var id = MutableLiveData(item.id)

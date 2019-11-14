@@ -28,14 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvLoading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:onClick="@{()->viewModel.getHomePageData()}"
-            app:textInfoAndVisiable="@{viewModel.loadState}"></TextView>
-
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
@@ -52,6 +44,14 @@
                 android:orientation="vertical"
                 app:layoutManager="LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <TextView
+            android:id="@+id/tvLoading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.getHomePageData()}"
+            app:textInfoAndVisiable="@{viewModel.loadState}"></TextView>
 
     </RelativeLayout>
 

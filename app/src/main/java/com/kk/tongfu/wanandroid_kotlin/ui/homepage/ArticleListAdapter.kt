@@ -9,7 +9,7 @@ import com.kk.tongfu.wanandroid_kotlin.databinding.ItemArticleBinding
 import com.kk.tongfu.wanandroid_kotlin.databinding.LayoutBannerBinding
 import com.kk.tongfu.wanandroid_kotlin.service.model.Article
 import com.kk.tongfu.wanandroid_kotlin.service.model.BannerList
-import com.kk.tongfu.wanandroid_kotlin.viewmodel.HomePageAdapterViewModel
+import com.kk.tongfu.wanandroid_kotlin.viewmodel.ArticleAdapterViewModel
 
 /**
  * Created by tongfu
@@ -17,7 +17,7 @@ import com.kk.tongfu.wanandroid_kotlin.viewmodel.HomePageAdapterViewModel
  * Desc:
  */
 
-class HomePageAdapter(val listener:ItemClickListener<HomePageAdapterViewModel>) :
+class ArticleListAdapter(val listener:ItemClickListener<ArticleAdapterViewModel>) :
     ListAdapter<Any, RecyclerView.ViewHolder>(ArticleDiff) {
 
     companion object {
@@ -77,8 +77,8 @@ class HomePageAdapter(val listener:ItemClickListener<HomePageAdapterViewModel>) 
 class ArticleViewHolder(private val binding: ItemArticleBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Article,listener:ItemClickListener<HomePageAdapterViewModel>) {
-        binding.viewModel = HomePageAdapterViewModel(item)
+    fun bind(item: Article,listener:ItemClickListener<ArticleAdapterViewModel>) {
+        binding.viewModel = ArticleAdapterViewModel(item)
         binding.onClickListener=listener
     }
 }

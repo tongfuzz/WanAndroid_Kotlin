@@ -5,28 +5,26 @@
     <data>
 
         <import type="com.kk.tongfu.wanandroid_kotlin.service.LoadState"></import>
-
-        <import type="androidx.recyclerview.widget.LinearLayoutManager"></import>
-
+        <import type="com.kk.tongfu.wanandroid_kotlin.service.RefreshState"></import>
         <import type="android.view.View"></import>
 
         <variable
             name="viewModel"
-            type="com.kk.tongfu.wanandroid_kotlin.viewmodel.SystemViewModel" />
+            type="com.kk.tongfu.wanandroid_kotlin.viewmodel.ArticleListViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{viewModel.loadState.equals(LoadState.SUCCESS)?View.VISIBLE:View.GONE}"
-            app:enableLoadMore="@{false}"
-            app:refreshState="@{viewModel.refreshState}"
-            >
+            app:enableLoadMore="@{!viewModel.refreshState.equals(RefreshState.LOADING_NO_MORE_DATA)}"
+            app:refreshState="@{viewModel.refreshState}">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -34,16 +32,15 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 app:layoutManager="LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
-
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
         <TextView
+            android:id="@+id/tv_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="@{()->viewModel.getSystemListData()}"
+            android:layout_gravity="center"
+            android:onClick="@{()->viewModel.getArticleList()}"
             android:gravity="center"
-            app:textInfoAndVisiable="@{viewModel.loadState}" />
+            app:textInfoAndVisiable="@{viewModel.loadState}"/>
     </FrameLayout>
-
 </layout>
-

@@ -27,4 +27,8 @@ interface ApiService {
     suspend fun getSystemListData():BaseResponse<MutableList<Chapter>?>
 
 
+    @GET("wxarticle/list/{id}/{pageNum}/json")
+    suspend fun getWeChatArticleListData(@Path("id") id: Int, @Path("pageNum") pageNum: Int): BaseResponse<ArticleList>
+
+
 }

@@ -1,7 +1,6 @@
 package com.kk.tongfu.wanandroid_kotlin.ui.homepage
 
 import android.view.View
-import com.kk.tongfu.wanandroid_kotlin.viewmodel.HomePageAdapterViewModel
 
 /**
  * Created by tongfu

@@ -9,7 +9,7 @@ import com.kk.tongfu.wanandroid_kotlin.R
 /**
  * Created by tongfu
  * on 2019-11-12
- * Desc:
+ * Desc:创建mainaviewmodel 用来在配置发生改变时保存数据
  */
 
 class MainViewModel(private val state:SavedStateHandle):ViewModel() {

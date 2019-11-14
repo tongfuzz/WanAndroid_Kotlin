@@ -1,6 +1,7 @@
 package com.kk.tongfu.wanandroid_kotlin.ui.system
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,7 +45,13 @@ class SystemFragment : DaggerFragment(), ScrollTop {
     private var listener = object : ItemClickListener<ChapterViewModel> {
 
         override fun onItemClick(view: View, item: ChapterViewModel) {
-
+            Intent(
+                context,
+                SystemDetailActivity::class.java
+            ).putExtra(SystemDetailActivity.CHAPTER_ITEM, item.item)
+                .apply {
+                    startActivity(this)
+                }
         }
     }
 
@@ -72,7 +79,7 @@ class SystemFragment : DaggerFragment(), ScrollTop {
             adapter.submitList(it)
         })
 
-        systemViewModel.refreshState.observe(this, Observer {
+        /*systemViewModel.refreshState.observe(this, Observer {
             when (it) {
                 RefreshState.LOADING_ERROR, RefreshState.LOADING_NO_MORE_DATA -> toast(R.string.no_more_data)
                 RefreshState.REFRESHING_ERROR -> toast(R.string.failed_to_refresh)
@@ -81,12 +88,21 @@ class SystemFragment : DaggerFragment(), ScrollTop {
                 }
             }
         })
-
+*/
         systemViewModel.toastStr.observe(this, Observer {
             it?.apply {
                 toast(this)
             }
         })
+
+        systemViewModel.netWorkInfo.observe(this, Observer {
+            it?.apply {
+                if(!it.isConnected){
+                    systemViewModel.stateNoNetwork()
+                }
+            }
+        })
+
     }
 
     override fun scrollTop() {

@@ -1,7 +1,6 @@
 package com.kk.tongfu.wanandroid_kotlin.service.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.kk.tongfu.wanandroid_kotlin.MainApplication
 import com.kk.tongfu.wanandroid_kotlin.service.dao.DaoService
 import com.kk.tongfu.wanandroid_kotlin.service.model.*
@@ -13,8 +12,14 @@ import com.kk.tongfu.wanandroid_kotlin.service.model.*
  */
 
 class ProjectRepository constructor(private val apiService: ApiService) : ApiService, DaoService {
+    override suspend fun getWeChatArticleListData(
+        id: Int,
+        pageNum: Int
+    ): BaseResponse<ArticleList> {
+        return apiService.getWeChatArticleListData(id, pageNum)
+    }
 
-    override  fun getNetWorkInfo(): LiveData<NetworkInfo>? {
+    override fun getNetWorkInfo(): LiveData<NetworkInfo>? {
         return MainApplication.database?.daoService()?.getNetWorkInfo()
     }
 

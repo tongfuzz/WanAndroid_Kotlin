@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kk.tongfu.wanandroid_kotlin.MainApplication
 import com.kk.tongfu.wanandroid_kotlin.R
 import com.kk.tongfu.wanandroid_kotlin.service.LoadState
 import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
+import com.kk.tongfu.wanandroid_kotlin.service.model.NetworkInfo
 
 /**
  * Created by tongfu
@@ -14,33 +16,44 @@ import com.kk.tongfu.wanandroid_kotlin.service.RefreshState
  * Desc:
  */
 
-open class BaseViewModel(val appContext: Context) : ViewModel() {
+open class BaseViewModel(private val appContext: Context) : ViewModel() {
 
-    protected val baseLoadState: MutableLiveData<LoadState> = MutableLiveData(LoadState.SUCCESS)
+    private val baseLoadState: MutableLiveData<LoadState> = MutableLiveData(LoadState.SUCCESS)
     val loadState: LiveData<LoadState>
         get() = baseLoadState
 
-    protected val baseRefreshState: MutableLiveData<RefreshState> =
+    private val baseRefreshState: MutableLiveData<RefreshState> =
         MutableLiveData(RefreshState.REFRESHING_SUCCESS)
     val refreshState: LiveData<RefreshState>
         get() = baseRefreshState
 
-    protected val baseToastString = MutableLiveData<String>()
+    private val baseToastString = MutableLiveData<String>()
     val toastStr: LiveData<String>
         get() = baseToastString
+
+    private val _netWorkInfo = MutableLiveData<NetworkInfo>()
+    val netWorkInfo: LiveData<NetworkInfo>
+        get() = _netWorkInfo
+
+    init {
+        _netWorkInfo.value = MainApplication.database?.daoService()?.getNetWorkInfo()?.value
+    }
 
     //没有数据的状态
     fun stateEmpty() {
         if (baseLoadState.value == LoadState.LOADING) {
             baseLoadState.value = LoadState.NO_DATA
+            baseToastString.value=appContext.getString(R.string.no_data)
         }
 
         if (baseRefreshState.value == RefreshState.REFRESHING) {
             baseRefreshState.value = RefreshState.REFRESHING_ERROR
+            baseToastString.value=appContext.getString(R.string.no_more_new_data)
         }
 
         if (baseRefreshState.value == RefreshState.LOADING) {
             baseRefreshState.value = RefreshState.LOADING_NO_MORE_DATA
+            baseToastString.value=appContext.getString(R.string.no_more_data)
         }
     }
 
@@ -65,14 +78,17 @@ open class BaseViewModel(val appContext: Context) : ViewModel() {
 
         if (baseLoadState.value == LoadState.LOADING) {
             baseLoadState.value = LoadState.ERROR
+            baseToastString.value=appContext.getString(R.string.load_error)
         }
 
         if (baseRefreshState.value == RefreshState.REFRESHING) {
             baseRefreshState.value = RefreshState.REFRESHING_ERROR
+            baseToastString.value=appContext.getString(R.string.failed_to_refresh)
         }
 
         if (baseRefreshState.value == RefreshState.LOADING) {
             baseRefreshState.value = RefreshState.LOADING_ERROR
+            baseToastString.value=appContext.getString(R.string.load_error)
         }
     }
 
@@ -85,9 +101,8 @@ open class BaseViewModel(val appContext: Context) : ViewModel() {
             baseRefreshState.value = RefreshState.LOADING_NO_NETWORK
         } else if (baseRefreshState.value == RefreshState.REFRESHING) {
             baseRefreshState.value = RefreshState.REFRESHING_NO_NETWORK
-        } else {
-            baseToastString.value = appContext.getString(R.string.no_network_and_check)
         }
+        baseToastString.value=appContext.getString(R.string.no_network_and_check)
     }
 
     //是否在加载更多的状态

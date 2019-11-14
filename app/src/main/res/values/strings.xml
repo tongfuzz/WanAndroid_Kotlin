@@ -37,4 +37,5 @@
     <string name="no_more_data">暂无更多数据</string>
     <string name="failed_to_refresh">刷新失败</string>
     <string name="chapter_name">%s / %s</string>
+    <string name="no_more_new_data">暂无新数据</string>
 </resources>

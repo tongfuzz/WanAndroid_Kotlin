@@ -52,6 +52,7 @@ class MainActivity : DaggerAppCompatActivity() {
         initToolbar()
         initView()
         bottomNav.selectedItemId = R.id.homepage
+        //todo 横竖屏切换需要处理
     }
 
     private fun initView() {
@@ -64,11 +65,6 @@ class MainActivity : DaggerAppCompatActivity() {
                 }
             }
         }
-        /*currentId?.observe(this, Observer {
-            it.apply {
-                    bottomNav.selectedItemId = it
-            }
-        })*/
     }
 
 
@@ -93,17 +89,6 @@ class MainActivity : DaggerAppCompatActivity() {
         })
         currentNavController = controller*/
 
-
-        /*supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_content, homePageFragment, getString(R.string.homepage)).commit()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_content, systemFragment, getString(R.string.system)).commit()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_content, weChatFragment, getString(R.string.we_chat)).commit()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_content, navigationFragment, getString(R.string.navigation)).commit()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_content, projectFragment, getString(R.string.project)).commit()*/
         bottomNav.setOnNavigationItemSelectedListener { menuItem ->
 
             val transaction = supportFragmentManager.beginTransaction()

@@ -12,7 +12,7 @@ import com.kk.tongfu.wanandroid_kotlin.util.ResourceUtils
  * Desc:
  */
 
-class HomePageAdapterViewModel constructor(item: Article) : ViewModel() {
+class ArticleAdapterViewModel constructor(item: Article) : ViewModel() {
 
     val top = MutableLiveData<Boolean>(item.top)
     val fresh = MutableLiveData<Boolean>(item.fresh)
