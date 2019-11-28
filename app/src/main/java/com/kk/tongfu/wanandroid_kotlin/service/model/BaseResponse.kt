@@ -6,4 +6,6 @@ package com.kk.tongfu.wanandroid_kotlin.service.model
  * Desc:
  */
 
-class BaseResponse<T> constructor(val errorCode:Int, val errorMsg:String?, val data:T?)
+class BaseResponse<T> constructor(val errorCode:Int, val errorMsg:String?, val data:T){
+
+}

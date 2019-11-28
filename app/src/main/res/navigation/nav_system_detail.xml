@@ -14,15 +14,8 @@
         <argument
             android:name="chapter"
             app:argType="com.kk.tongfu.wanandroid_kotlin.service.model.Chapter" />
-        <action
-            android:id="@+id/action_systemDetailFragment_to_blankFragment"
-            app:destination="@id/blankFragment" />
+
     </fragment>
-    <fragment
-        android:id="@+id/blankFragment"
-        android:name="com.kk.tongfu.wanandroid_kotlin.BlankFragment"
-        android:label="fragment_blank"
-        tools:layout="@layout/fragment_blank" />
 
 
 </navigation>

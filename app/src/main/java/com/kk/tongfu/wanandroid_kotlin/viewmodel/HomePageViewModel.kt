@@ -1,13 +1,12 @@
 package com.kk.tongfu.wanandroid_kotlin.viewmodel
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.kk.tongfu.wanandroid_kotlin.service.HttpCode
+import com.kk.tongfu.wanandroid_kotlin.service.model.ArticleList
 import com.kk.tongfu.wanandroid_kotlin.service.model.BannerList
-import com.kk.tongfu.wanandroid_kotlin.service.model.NetworkInfo
 import com.kk.tongfu.wanandroid_kotlin.service.repository.ProjectRepository
 import com.kk.tongfu.wanandroid_kotlin.util.getNetWorkData
+import com.kk.tongfu.wanandroid_kotlin.util.safeApiCall
 import javax.inject.Inject
 
 /**
@@ -38,38 +37,53 @@ class HomePageViewModel @Inject constructor(
     private fun getData() {
 
         getNetWorkData {
+
             pageNum = 1
-            val bannerList = repository.getBannerData()
-            val topArticleListData = repository.getTopArticleListData()
-            val articleList = repository.getArticleListData(pageNum)
-            //如果数据没有请求成功
-            if (articleList.errorCode != HttpCode.SUCCESS) {
-                stateError()
-                return@getNetWorkData
-            }
 
-            //如果数据请求成功
-            val data = topArticleListData.data
-            if (topArticleListData.errorCode == HttpCode.SUCCESS && data != null && data.isNotEmpty()) {
-                for (article in data) {
-                    article.top = true
+            var articleList: ArticleList? = null
+
+            safeApiCall(
+                call = {
+                    repository.getArticleListData(pageNum)
+                },
+                onEntitySuccess = {
+                    articleList = it
+                },
+                onError = { _, _ ->
+                    stateError()
+                })
+
+
+
+            safeApiCall(call = {
+                repository.getTopArticleListData()
+            }, onListSuccess = {
+                it?.apply {
+                    if (this.isNotEmpty()) {
+                        for (article in this) {
+                            article.top = true
+                        }
+                        articleList?.datas?.addAll(0, this)
+                    }
                 }
+            })
 
-                if (articleList.data != null) {
-                    articleList.data.datas.addAll(0, data)
-                }
-            }
+            safeApiCall(
+                call = {
+                    repository.getBannerData()
+                },
+                onListSuccess = {
+                    it?.apply {
+                        val mutableList = articleList?.datas as MutableList<Any>
+                        val banner = BannerList(this) as Any
+                        mutableList.add(0, banner)
+                    }
+                })
 
-            //设置数据
-            _bannerList.value?.data = bannerList.data
-            if (bannerList.errorCode == HttpCode.SUCCESS && bannerList.data != null && bannerList.data.isNotEmpty()) {
-                (articleList.data?.datas as MutableList<Any>).add(0, _bannerList.value as Any)
-            }
 
-            val mutableList = articleList.data?.datas as MutableList<Any>
-
-            _articleList.value = mutableList
+            _articleList.value = articleList?.datas as MutableList<Any>
             stateMain()
+
         }
     }
 
@@ -77,7 +91,7 @@ class HomePageViewModel @Inject constructor(
 
         stateLoadmore()
         getNetWorkData {
-            val articleList = repository.getArticleListData(pageNum+1)
+            /*val articleList = repository.getArticleListData(pageNum + 1)
             if (articleList.errorCode != HttpCode.SUCCESS) {
                 stateError()
                 return@getNetWorkData
@@ -91,7 +105,25 @@ class HomePageViewModel @Inject constructor(
                 stateMain()
             } else {
                 stateEmpty()
-            }
+            }*/
+
+            safeApiCall(call = {
+                repository.getArticleListData(pageNum + 1)
+            }, onEntitySuccess = {
+                it?.datas?.also { it ->
+                    if (it.isNotEmpty()) {
+                        _articleList.value = _articleList.value?.apply {
+                            addAll(it)
+                        }
+                    }
+                }
+                pageNum += 1
+                stateMain()
+            }, onEmpty = {
+                stateEmpty()
+            }, onError = { _, _ ->
+                stateError()
+            })
         }
 
     }
@@ -111,5 +143,6 @@ class HomePageViewModel @Inject constructor(
             getData()
         }
     }
+
 
 }

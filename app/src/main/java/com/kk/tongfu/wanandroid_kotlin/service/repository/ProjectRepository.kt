@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.kk.tongfu.wanandroid_kotlin.MainApplication
 import com.kk.tongfu.wanandroid_kotlin.service.dao.DaoService
 import com.kk.tongfu.wanandroid_kotlin.service.model.*
+import kotlinx.coroutines.delay
 
 /**
  * Created by tongfu
@@ -11,7 +12,7 @@ import com.kk.tongfu.wanandroid_kotlin.service.model.*
  * Desc:
  */
 
-class ProjectRepository constructor(private val apiService: ApiService) : ApiService, DaoService {
+class ProjectRepository constructor(private val apiService: ApiService) :BaseRepository(), ApiService, DaoService {
     override suspend fun getWeChatArticleListData(
         id: Int,
         pageNum: Int

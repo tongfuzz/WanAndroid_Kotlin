@@ -13,11 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import com.kk.tongfu.wanandroid_kotlin.MainApplication
+import com.kk.tongfu.wanandroid_kotlin.service.HttpCode
 import com.kk.tongfu.wanandroid_kotlin.service.model.BaseResponse
 import com.kk.tongfu.wanandroid_kotlin.service.model.NetworkInfo
 import com.kk.tongfu.wanandroid_kotlin.viewmodel.BaseViewModel
 import kotlinx.coroutines.*
 import java.net.UnknownHostException
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -111,10 +113,38 @@ fun BaseViewModel.getNetWorkData(
     val coroutineExceptionHandler = CoroutineExceptionHandler { context, throwable ->
         when (throwable) {
             is UnknownHostException -> {
-                  stateNoNetwork()
+                stateNoNetwork()
             }
         }
     }
     viewModelScope.launch(coroutineExceptionHandler, start, block)
 }
+
+suspend fun <T : Any?> safeApiCall(
+    call: suspend () -> BaseResponse<T>,
+    onListSuccess: (data: T) -> Unit = {},
+    onEntitySuccess:(data:T)->Unit={},
+    onEmpty: () -> Unit = {},
+    onError: (code: Int, message: String?) -> Unit = { i: Int, s: String? -> }
+) {
+
+    val response = call.invoke()
+
+    if (response.errorCode == HttpCode.SUCCESS) {
+        //网络请求成功
+        if (response.data != null) {
+            if(response.data is Collection<*>) {
+                onListSuccess(response.data)
+            }else{
+                onEntitySuccess(response.data)
+            }
+        } else {
+            onEmpty()
+        }
+    } else {
+        onError(response.errorCode, response.errorMsg)
+    }
+
+}
+
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kk.tongfu.wanandroid_kotlin.R
+import com.kk.tongfu.wanandroid_kotlin.databinding.FragmentNavigationBinding
 import com.kk.tongfu.wanandroid_kotlin.ui.system.SystemFragment
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -16,6 +17,9 @@ import javax.inject.Inject
  * A simple [Fragment] subclass.
  */
 class NavigationFragment : DaggerFragment() {
+
+
+    private lateinit var fragmentNavigationBinding: FragmentNavigationBinding
 
 
     companion object{
@@ -35,11 +39,9 @@ class NavigationFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_navigation, container, false)
+        fragmentNavigationBinding = FragmentNavigationBinding.inflate(inflater, container, false)
+        return fragmentNavigationBinding.root
     }
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
